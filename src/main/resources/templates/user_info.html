@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" lang="ru">
+    <title>Moment</title>
+    <link  href="/css/bootstrap.min.css" rel="stylesheet" >
+    <link  href="/css/style.css" rel="stylesheet" >
+
+
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-5">
+            <form action="/user_save_changes" method = "post">
+                <p></p>
+                <table class="table table-success table-striped">
+                    <input type="hidden" name="userId" th:value="${userDto.getId}" />
+                    <thead>
+                    <tr>
+                        <th> Name </th>
+                        <th> Role </th>
+                        <th> Password </th>
+                        <th> Data </th>
+                        <th> ID </th>
+                        <th>  </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th>
+                            <input type="text" th:name="userName" th:value="${userDto.getUserName}"  size="11" />
+                        </th>
+                        <th>
+                            <input type="text" th:name="roleUser" th:value="${userDto.getRoleUser}"  size="11" />
+                        </th>
+                        <th>
+                            <input type="text" th:name="passwordUser" th:value="${userDto.getPasswordUser}"  size="11" />
+                        </th>
+                        <th> <a th:text = "${userDto.getDataUser}" >   </a> </th>
+                        <th> <a th:text = "${userDto.getId}" >   </a> </th>
+                        <th>  <a th:href = " @{/user_delete/{id}(id = ${userDto.getId()})} " >
+                            <p th:text="удалить"> </p> </a></th>
+                    </tr>
+                    </tbody>
+                </table>
+                <p></p>
+                Materials
+                <p></p>
+
+                <table class="table table-success table-striped">
+                    <thead>
+                    <tr>
+                        <th> Name </th>
+                        <th> Limit </th>
+                        <th> Class </th>
+                        <th> Comment </th>
+                        <th> ID </th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <div th:each = "material: ${materalsDto}" >
+
+                        <tbody>
+                        <tr>
+                            <th>
+                                <input type="text" th:name="${material.getMaterialsName}" th:value="${material.getMaterials}"  size="11" />
+                            </th>
+                            <th>
+                                <input type="text" th:name="${material.getLimitName}" th:value="${material.getLimitStrength}"  size="5" />
+                            </th>
+                            <th>
+                                <input type="text" th:name="${material.getClassName}" th:value="${material.getStrengthClass}"  size="4" />
+                            </th>
+                            <th>
+                                <input type="text" th:name="${material.getCommentsName}" th:value="${material.getComments}"  size="15" />
+                            </th>
+                            <th>
+                                <a th:text = "${material.getId}" ></a>
+                            </th>
+                            <th>  <a th:href = " @{/material_delete/{id}(id = ${material.getId()})} " >
+                                <p th:text="удалить"> </p> </a></th>
+
+                        </tr>
+                        </tbody>
+
+                    </div>
+                </table>
+                <p></p>
+
+                <button id="submit2" type="submit"> Save</button>
+                <label for="submit2"> changes</label>
+            </form>
+        </div>
+    </div>
+</div>
+<p></p>
+<p></p>
+
+<script src="/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" xmlns: th ="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8" lang="ru">
+    <title>Moment</title>
+    <link  href="/css/bootstrap.min.css" rel="stylesheet" >
+    <link  href="/css/style.css" rel="stylesheet" >
+</head>
+<body>
+<header>
+    <div class="container">
+        <div class="row">
+            <div class="col-5">
+                <h1 class="text-center text-white"> Moment thread</h1>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="container">
+    <div class="row">
+        <div class="col-9">
+            <a href = "/user_registrationEnter" > <p th:text=" ${userName} "> </p> </a>
+            <p></p>
+            <form action  = "/materials_create_auto" method = "GET">
+                <button type="submit" id="submit2" class="btn btn-primary">Авто создание</button>
+                <label for="submit2">New material</label>
+            </form>
+
+            <form method="POST" action="/materials_create" th:object = "${newMaterial}" >
+
+                <p></p>
+                <table class="table table-bordered">
+                    <thead>
+                    <tr class="table-secondary table align-middle">
+                        <th>
+                            <label for="materials">Материал (болт)</label>
+                            <input th:type="text" class="btn btn-outline-dark" name="materials" id="materials"
+                                   th:placeholder="Сталь"/>
+                        </th>
+
+                        <th>
+                            <label for="limit_strength">Предел текучести, МПа (болт)</label>
+                            <input th:type="text" class="btn btn-outline-dark" name="limit_strength" id="limit_strength"
+                                   th:placeholder="600"/>
+                        </th>
+                        <th>
+                            <label for="strengthClass">Класс прочности (болт)</label>
+                            <input th:type="text" class="btn btn-outline-dark" name="strengthClass" id="strengthClass"
+                                   th:placeholder="0"/>
+                        </th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="table-danger table align-middle">
+                        <th>
+                            <label for="materialScrew">Материал (гайка)</label>
+                            <input th:type="text" class="btn btn-outline-dark"  id="materialScrew" name ="materialScrew"
+                                   th:placeholder="Сталь"/>
+                        </th>
+                        <th>
+                            <label for="limitScrew">Предел текучести, MПа (гайка)</label>
+                            <input th:type="text" class="btn btn-outline-dark" name="limitScrew" id="limitScrew"
+                                   th:placeholder="500"/>
+
+                        </th>
+                        <th>
+                            <label for="classScrew">Класс прочности (гайка)</label>
+                            <input th:type="text" class="btn btn-outline-dark" name="classScrew" id="classScrew"
+                                   th:placeholder="0"/>
+                        </th>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <p></p>
+                <label for="kDepth">Коэфф. длины резьбы </label>
+                <input th:type="text" class="btn btn-outline-dark" name="kDepth" id="kDepth"
+                       th:placeholder="1.0"/>
+                <label for="kDepth"> = h/d,
+                    для стали:  0,8...1,2,
+                    для аллюм. сплав.: 1,2...1,5</label>
+                <p></p>
+
+                <table class="table table-bordered">
+                    <thead>
+                    <tr class="table-secondary table align-middle">
+                        <th> Резьба </th>
+                        <div th:each = "thread: ${threads}" >
+                            <th>
+                                <p th:text=" ${thread.getThread()} "> </p>
+                            </th>
+                        </div>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="table-danger table align-middle">
+                        <th> Момент затяжки Нм </th>
+                        <div th:each = "thread: ${threads}" >
+                            <th>
+                                <input type="text" class="btn btn-outline-dark" th:name="${thread.getThread()}" th:placeholder="0" size="4" />
+                            </th>
+                        </div>
+                    </tr>
+                    <tr>
+
+                    </tbody>
+                </table>
+                <p></p>
+
+                <label for="comments">Comments  </label>
+                <input th:type="text" class="btn btn-outline-dark"  name="comments" id="comments"/>
+
+                <p></p>
+
+                    <button type="submit" id="submit" class="btn btn-primary">Сохранить</button>
+            </form>
+        </div>
+
+    </div>
+    <p></p>
+    * в качестве разделителя использовать " . "
+<p></p>
+
+<script src="/js/bootstrap.bundle.min.js"></script>
+
+
+<footer>
+    <div class="conteiner">
+        <div class="row">
+            <div class="col-5">
+                <h4 class="text-center text-white"> EV</h4>
+            </div>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>

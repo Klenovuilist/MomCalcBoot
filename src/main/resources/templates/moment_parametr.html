@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en" xmlns: th ="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8" lang="ru">
+    <title>Moment</title>
+    <link  href="/css/bootstrap.min.css" rel="stylesheet" >
+    <link  href="/css/style.css" rel="stylesheet" >
+
+</head>
+<body>
+<header>
+    <div class="container">
+        <div class="row">
+            <div class="col-5">
+                <h1 class="text-center text-white"> Момент</h1>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="container">
+
+    <div class="row">
+        <div class="col-4">
+
+            <a href = "/user_registrationEnter" > <p th:text=" ${userName} "> </p> </a>
+            <p></p>
+            <h5> Расчет момента затяжки с заданными параметрами (по уравнению Каллермана-Кляйна) </h5>
+            <p></p>
+
+            <!-- action="/moment_page_1" -->
+            <form method="get" action = "/moment_parametr"  >
+                <p>
+                    <label for="thread">Резьба:</label>
+
+                        <!-- name="threadId" - параметр в get запросе - выбор резьбы                   -->
+                    <select id="thread" name="threadId" class="form-select form-select-lg mb-3">
+                        <!-- селектор выбора резьбы -->
+                        <div th:each = "thread: ${threads}" >
+
+                            <option th:id="${thread.getThread()}" th:value= "${thread.getId()}" > <a th:text = "${thread.getThread()}" > </a> </option>
+
+                        </div>
+                    </select>
+                    <!-- вспомогательная переменная и сохранение выбора в селект -->
+                    <input type="hidden"  id="threadSelect"  th:value="${thread}" />
+                        <!--   th:value="${thread}" - передается от сервера (М3, М4...)                 -->
+
+                    <script>
+                    const thread = document.getElementById("threadSelect");
+                    const seletct = document.getElementById(thread.getAttribute("value"));
+                    seletct.setAttribute("selected", "true");
+
+                </script>
+                </p>
+                <p>
+                 <div class="d-grid gap-2 d-md-block">
+                    <button class="btn btn-dark" type="submit">Выбрать</button>
+                 </div>
+                </p>
+            </form>
+
+           <p> </p>
+
+            ------------
+
+            <table class="table table-bordered">
+
+                <!--  Заголовок-->
+
+                <tbody>
+                <tr class="table-danger table align-middle">
+                    <th> Момент затяжки </th>
+                    <th> Усилие затяжки </th>
+                    <th> Напряжение в резьбе (среднее) </th>
+                    <th> Напряжение в стержне болта </th>
+
+                </tr>
+
+                <tr class="table-warning table align-middle">
+                    <th > <a th:text = "${dataForCalc[momentKellerman_NM]} + ' Нм'"  > </a> </th>
+                    <th> <a th:text = "${dataForCalc[powerMaxForMaterial_kgs]} + ' кгс'" size="5"> </a> </th>
+                    <th> <a th:text = "${dataForCalc[stregthTread_Mpa]} + ' МПа'" size="5"> </a> </th>
+                    <th> <a th:text = "${dataForCalc[stregthBoltRot_Mpa]} + ' МПа'"  size="5"> </a> </th>
+                </tr >
+                </tbody>
+            </table>
+            <p></p>
+        </div>
+        <div class="col-4">
+
+            <!-- форма вычисления силы и момента-->
+            <form method="get" action = "/moment_parametr">
+                    <p></p>
+                <!-- выбор расчета без болта-->
+                <p></p>
+
+                <input type="checkbox" class="form-check-input" id="withOrNoBolt"  name="no_bolt" value="no_bolt" /> Не учитывать болт (при расчете допустимого усилия затяжки (Fmax) будет учитываться только &#963;Т для гайки) - болт значительно прочнее гайки
+                <p></p>
+                        <!-- вспомогат перемн. для состояния чекбокса-->
+                <input type="hidden" id="isNotBolt" name="isNotBolt" th:value="${no_bolt}"/>
+                <script>
+                        <!--назначение атрибута checked для чекбокса-->
+                    const checkBolt = document.getElementById("isNotBolt");
+                        if(checkBolt.getAttribute("value") === "0"){
+                        }
+                        else {
+                            const check = document.getElementById("withOrNoBolt");
+                            check.setAttribute("checked", "true");
+                        }
+                </script>
+
+                <p></p>
+                <div class="d-grid gap-2 d-md-block">
+                    <button class="btn btn-dark" type="submit">Применить параметры</button>
+                </div>
+                <p></p>
+
+                <h6>Параметры резьбы</h6>
+                <p></p>
+                <table class="table table-bordered">
+
+                    <!--  Заголовок-->
+
+                    <tbody>
+                    <tr class="table-danger table align-middle">
+                        <th class="table-secondary">
+                            <input id="thread_mm" type="text" class="btn btn-outline-dark btn-sm" th:name="diametrThread_mm" th:value="${dataForCalc[diametrThread_mm]}"  size="3" />
+                        </th>
+                        <th class="table-light"> Диаметр резьбы (d, мм) </th>
+
+                    </tr>
+
+                    <tr class="table-warning table align-middle">
+                        <th class="table-secondary" >
+                            <input id="middleDiamThread_mm" type="text" class="btn btn-outline-dark btn-sm" th:name="middleDiamThread_mm" th:value="${dataForCalc[middleDiamThread_mm]}"  size="4" />
+                        </th>
+                        <th class="table-light"> Средний диаметр резьбы (d2, мм) </th>
+                    </tr >
+                    <tr class="table-warning table align-middle">
+                        <th  class="table-secondary">
+                            <input id="stepThread_mm" type="text" class="btn btn-outline-dark btn-sm" th:name="stepThread_mm" th:value="${dataForCalc[stepThread_mm]}"  size="3" />
+                        </th>
+                        <th class="table-light"> Шаг резьбы (P, мм) </th>
+                    </tr >
+                    </tbody>
+                </table>
+<!--                <input id="thread_mm" type="text" class="btn btn-outline-dark btn-sm" th:name="diametrThread_mm" th:value="${dataForCalc[diametrThread_mm]}"  size="3" />-->
+<!--                <label for="thread_mm">Диаметр резьбы (d, мм) </label>-->
+<!--                <p></p>-->
+
+<!--                <input id="middleDiamThread_mm" type="text" class="btn btn-outline-dark btn-sm" th:name="middleDiamThread_mm" th:value="${dataForCalc[middleDiamThread_mm]}"  size="4" />-->
+<!--                <label for="middleDiamThread_mm">Средний диаметр резьбы (d2, мм) </label>-->
+<!--                <p></p>-->
+
+<!--                <input id="stepThread_mm" type="text" class="btn btn-outline-dark btn-sm" th:name="stepThread_mm" th:value="${dataForCalc[stepThread_mm]}"  size="3" />-->
+<!--                <label for="stepThread_mm">Шаг резьбы (P, мм) </label>-->
+<!--                <p></p>-->
+
+                <h6>Параметры соединения</h6>
+                <p></p>
+                <table class="table table-bordered">
+                <tbody>
+                <tr class=" table align-middle">
+                    <th class="table-secondary">
+                        <input id="StrengthBolt" type="text" class="btn btn-outline-dark btn-sm" th:name="limateStrengthBolt_Mpa" th:value="${dataForCalc[limateStrengthBolt_Mpa]}"  size="5" />
+                    </th>
+                    <th class="table-light"> Предел текучести болта (&#963;Т, МПа) </th>
+                </tr>
+                <tr class="table-danger table align-middle">
+                    <th class="table-secondary">
+                        <input id="StrengthScrew" type="text" class="btn btn-outline-dark btn-sm" th:name="limateStrengthScrew_Mpa" th:value="${dataForCalc[limateStrengthScrew_Mpa]}"  size="5" />
+                    </th>
+                    <th class="table-light"> Предел текучести гайки (&#963;Т, МПа) </th>
+                </tr>
+                <tr class="table-danger table align-middle">
+                    <th class="table-secondary">
+                        <input id="k_threadDepth" type="text" class="btn btn-outline-dark btn-sm" th:name="k_threadDepth" th:value="${dataForCalc[k_threadDepth]}"  size="2" />
+                    </th>
+                    <th class="table-light"> Коэфф. длины резьбы (Kh = h / d)
+                        для стали Kh = 0,8...1,2,
+                        для аллюминия Kh = 1,2...1,5 </th>
+                </tr>
+
+                <tr class="table-danger table align-middle">
+                    <th class="table-secondary">
+                        <input id="safetyFactor" type="text" class="btn btn-outline-dark btn-sm" th:name="safetyFactor" th:value="${dataForCalc[safetyFactor]}"  size="4" />
+                    </th>
+                    <th class="table-light"> Коэфф. нагрузки (KБ). Не более 1,0 </th>
+                </tr>
+                <tr class="table-danger table align-middle">
+                    <th class="table-secondary">
+                        <input id="coefficientOfFrictionThread" class="btn btn-outline-dark btn-sm" type="text" th:name="coefficientOfFrictionThread" th:value="${dataForCalc[coefficientOfFrictionThread]}"  size="4" />
+                    </th>
+                    <th class="table-light"> Коэфф.трения в резьбе (&#956;th) </th>
+                </tr>
+                <tr class="table-danger table align-middle">
+                    <th class="table-secondary">
+                        <input id="coefficientOfFrictionBoltHead" type="text" class="btn btn-outline-dark btn-sm" th:name="coefficientOfFrictionBoltHead" th:value="${dataForCalc[coefficientOfFrictionBoltHead]}"  size="4" />
+                    </th>
+                    <th class="table-light"> Коэфф.трения головки болта(гайки)(&#956;b) </th>
+                </tr>
+                <tr class="table-danger table align-middle">
+                    <th class="table-secondary">
+                        <input id="diametrHead_mm" type="text" class="btn btn-outline-dark btn-sm" th:name="diametrHead_mm" th:value="${dataForCalc[diametrHead_mm]}"  size="4" />
+                    </th>
+                    <th class="table-light"> Диаметр головки болта(гайки)(D0, мм) </th>
+                </tr>
+                <tr class="table-danger table align-middle">
+                    <th class="table-secondary">
+                        <input id="diametrHole_mm" type="text" class="btn btn-outline-dark btn-sm" th:name="diametrHole_mm" th:value="${dataForCalc[diametrHole_mm]}"  size="4" />
+                    </th>
+                    <th class="table-light"> Диаметр отв. под болт (dh, мм) </th>
+                </tr>
+                </tbody>
+                </table>
+
+<!--                <input id="StrengthBolt" type="text" class="btn btn-outline-dark btn-sm" th:name="limateStrengthBolt_Mpa" th:value="${dataForCalc[limateStrengthBolt_Mpa]}"  size="5" />-->
+<!--                <label for="StrengthBolt">Предел текучести болта (&#963;Т, МПа) </label>-->
+
+<!--                <p></p>-->
+
+<!--                <input id="StrengthScrew" type="text" class="btn btn-outline-dark btn-sm" th:name="limateStrengthScrew_Mpa" th:value="${dataForCalc[limateStrengthScrew_Mpa]}"  size="5" />-->
+<!--                <label for="StrengthScrew">Предел текучести гайки (&#963;Т, МПа) </label>-->
+
+<!--                <p></p>-->
+<!--                    <input id="k_threadDepth" type="text" class="btn btn-outline-dark btn-sm" th:name="k_threadDepth" th:value="${dataForCalc[k_threadDepth]}"  size="2" />-->
+<!--                    <label for="k_threadDepth">Коэфф. длины резьбы (Kh = h / d)-->
+<!--                        рекомендации:-->
+<!--                        для стали Kh = 0,8...1,2,-->
+<!--                        для аллюминия Kh = 1,2...1,5</label>-->
+<!--                    <p></p>-->
+
+<!--                    <input id="safetyFactor" type="text" class="btn btn-outline-dark btn-sm" th:name="safetyFactor" th:value="${dataForCalc[safetyFactor]}"  size="4" />-->
+<!--                    <label for="safetyFactor">Коэфф. нагрузки (KБ). Не более 1,0 </label>-->
+<!--                    <p></p>-->
+
+
+
+<!--                    <input id="coefficientOfFrictionThread" class="btn btn-outline-dark btn-sm" type="text" th:name="coefficientOfFrictionThread" th:value="${dataForCalc[coefficientOfFrictionThread]}"  size="4" />-->
+<!--                    <label for="coefficientOfFrictionThread">Коэфф.трения в резьбе (&#956;th)</label>-->
+<!--                    <p></p>-->
+
+<!--                    <input id="coefficientOfFrictionBoltHead" type="text" class="btn btn-outline-dark btn-sm" th:name="coefficientOfFrictionBoltHead" th:value="${dataForCalc[coefficientOfFrictionBoltHead]}"  size="4" />-->
+<!--                    <label for="coefficientOfFrictionBoltHead">Коэфф.трения головки болта(гайки)(&#956;b) </label>-->
+<!--                    <p></p>-->
+
+<!--                    <input id="diametrHead_mm" type="text" class="btn btn-outline-dark btn-sm" th:name="diametrHead_mm" th:value="${dataForCalc[diametrHead_mm]}"  size="4" />-->
+<!--                    <label for="diametrHead_mm">Диаметр головки болта(гайки)(D0, мм) </label>-->
+<!--                    <p></p>-->
+
+<!--                    <input id="diametrHole_mm" type="text" class="btn btn-outline-dark btn-sm" th:name="diametrHole_mm" th:value="${dataForCalc[diametrHole_mm]}"  size="4" />-->
+<!--                    <label for="diametrHole_mm">Диаметр отв. под болт (dh, мм) </label>-->
+<!--                    <p></p>-->
+<!--                    <p>-->
+            </form>
+
+            <!-- третья колонка-->
+        </div>
+        <div class="col-4">
+
+            <img src="image/vint_image.JPG" class="img-fluid" alt="">
+            <p></p>
+            ------------
+            <p></p>
+            <img src="image/kallerman_1.JPG" class="img-fluid" alt="">
+            ------------
+            <p></p>
+            <img src="image/f_max_1.JPG" class="img-fluid" alt="">
+            -----------
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-4">
+            <form id="buttonGroup">
+                <div class="d-grid gap-2 d-md-block btn-sm">
+                    <button class="btn btn-dark" id="submitSelect" type="submit"> На главную </button>
+<!--                    <button class="btn btn-dark" id="submitAdd" type="submit"> Новый материал </button>-->
+                </div>
+            </form>
+
+            <script>
+                document.getElementById("submitSelect").onclick = buttonSelect;
+                document.getElementById("submitAdd").onclick = buttonAdd;
+
+                function buttonSelect(){
+                    const form_1 = document.getElementById("buttonGroup");
+                    form_1.setAttribute("action", "/moment_page_1");
+                    form_1.setAttribute("method", "GET");
+                }
+                function buttonAdd(){
+                    const form_1 = document.getElementById("buttonGroup");
+                    form_1.setAttribute("action", "/materials_create");
+                    form_1.setAttribute("method", "GET");
+                }
+
+            </script>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    document.write("<h6>25.09.2024</h6>");
+
+    console.log("25.09.2024");
+</script>
+
+<script src="/js/bootstrap.bundle.min.js"></script>
+
+<footer>
+    <div class="conteiner">
+        <div class="row">
+            <div class="col-5">
+                <h4 class="text-center text-white"> EV</h4>
+            </div>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>
+
+
+
+
+
+
+
+dataForCalc.put("", "0");

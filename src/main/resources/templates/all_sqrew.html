@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" lang="ru">
+    <title>Moment</title>
+    <link  href="/css/bootstrap.min.css" rel="stylesheet" >
+    <link  href="/css/style.css" rel="stylesheet" >
+
+
+</head>
+<body>
+<header>
+    <div class="container">
+        <div class="row">
+            <div class="col-8">
+                <h1 class="text-center text-white">  Material </h1>
+            </div>
+        </div>
+    </div>
+</header>
+<p></p>
+<div class="container">
+    <div class="row">
+        <div class="col-6">
+            <P></P>
+            <a href = "/user_registrationEnter" > <p th:text=" ${user.getUserName()} "> </p> </a>
+            <p></p>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-7">
+            <P></P>
+                 <h4> Materials  <a th:text = "${user.getUserName()}" > </a> </h4>
+            <p></p>
+        </div>
+
+        <div class="col-5">
+           <P></P>
+            <h4> Стандартные гайки</h4>
+            <p></p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-7">
+            <form action = "/all_sqrew" method = "POST">
+
+                <!-- Таблица болты пользователь               -->
+
+                <table class="table table-bordered">
+                    <thead>
+                    <tr class="table-warning table align-middle">
+
+                        <th>
+                            <h6> Гайка</h6>
+                        </th>
+                        <th>
+                            <h6> Предел текучести, МПа</h6>
+                        </th>
+                        <th>
+                            <h6> Класс по ГОСТ 1759.5</h6>
+                        </th>
+                        <th>
+                            <h6> Коэфф. h/d</h6>
+                        </th>
+                        <th>
+                            <h6> Примечание</h6>
+                        </th>
+                        <th>
+                            <h6> Дата</h6>
+
+                        </th>
+                        <th></th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <div th:each = "sqrew: ${sqrewsUser}" >
+                        <tr class="table-success table align-middle">
+                            <!--                            name limit comment dataCreate classSqrew-->
+                            <th>
+                                <input class="btn btn-outline-dark" id="sqrew_name" type="text"
+                                       th:value="${sqrew.getName()}" th:name="'name' + ${sqrew.getId()}" size="7" />
+                            </th>
+                            <th>
+                                <input class="btn btn-outline-dark" id="sqrew_limit" type="text"
+                                       th:name="'limit'+ ${sqrew.getId()}" th:value="${sqrew.getLimit()}"  size="3" />
+                            </th>
+                            <th>
+                                <input class="btn btn-outline-dark" id="sqrew_classSqrew" type="text"
+                                       th:name="'classSqrew' + ${sqrew.getId()}" th:value="${sqrew.getClassSqrew()}"  size="2" />
+                            </th>
+                            <th>
+                                <input class="btn btn-outline-dark" id="sqrew_depth" type="text"
+                                       th:name="'depth' + ${sqrew.getId()}" th:value="${sqrew.getDepth()}"  size="2" />
+                            </th>
+                            <th>
+                                <input class="btn btn-outline-dark" id="sqrew.comment" type="text"
+                                       th:name="'comments' + ${sqrew.getId()}" th:value="${sqrew.getComment()}"  size="8" />
+                            </th>
+
+                            <th>
+                                <h6> <a th:text="${sqrew.getDataCreate()}">  </a> </h6>
+                            </th>
+                            <th>
+                                <a th:href = "@{/all_sqrew/{id}(id = ${sqrew.getId()})}" >   <h8>удалить</h8>  </a>
+                            </th>
+                        </tr>
+                    </div>
+                    <!--                        Строка создания нового болта-->
+                    <tr class="table-success table align-middle">
+                        <th>
+                            <input  class="btn btn-outline-dark" placeholder="новый материал" id="sqrew_name_new" type="text" name="sqrew_name_new"  size="7"  />
+                        </th>
+                        <th>
+                            <input class="btn btn-outline-dark" id="sqrew_limit_new" type="text"  name="sqrew_limit_new"  placeholder="450" size="2" />
+                        </th>
+                        <th>
+                            <input class="btn btn-outline-dark"  type="text" name="sqrew_classSqrew_new" placeholder="5.5"  size="2" />
+                        </th>
+                        <th>
+                            <input id="sqrew_depth_new" class="btn btn-outline-dark" type="text" name="sqrew_depth_new" placeholder="0.8" size="2"  />
+                        </th>
+                        <th>
+                            <input id="sqrew.comment_new" class="btn btn-outline-dark" type="text" name="sqrew.comment_new" placeholder="comm" size="8" />
+                        </th>
+
+                        <th>
+
+                        </th>
+                        <th>
+
+                        </th>
+                    </tr>
+
+                    </tbody>
+                </table>
+                <p></p>
+                <button type="submit" class="btn btn-dark">Сохранить</button>
+
+            </form>
+            <p></p>
+            <form action = "/moment_page_1" method = "get">
+
+                <div class="d-grid gap-2 d-md-block">
+                    <button class="btn btn-dark" id="submit2" type="submit"> На главную </button>
+                </div>
+            </form>
+            <p></p>
+        </div>
+
+        <div class="col-5">
+            <!--таблица Болты админ-->
+            <table class="table table-bordered">
+                <thead>
+                <tr class="table-warning table align-middle">
+
+                    <th>
+                        <h6> Болт</h6>
+                    </th>
+                    <th>
+                        <h6> Предел текучести, МПа</h6>
+                    </th>
+                    <th>
+                        <h6> Класс по ГОСТ 1759.5</h6>
+                    </th>
+                    <th>
+                        <h6> Коэфф. h/d</h6>
+                    </th>
+
+                    <th>
+                        <h6> Примечание</h6>
+                    </th>
+
+                </tr>
+                </thead>
+                <tbody>
+                <div th:each = "sqrew: ${sqrewsAdmin}" >
+                    <tr class="table-success table align-middle">
+
+                        <th>
+                            <a th:text="${sqrew.getName()}" > </a>
+                        </th>
+                        <th>
+                            <a th:text =  "${sqrew.getLimit()}" > </a> MPa
+                        </th>
+                        <th>
+                            <a th:text =  "${sqrew.getClassSqrew()}" > </a>
+                        </th>
+                        <th>
+                            <a th:text =  "${sqrew.getDepth()}" > </a>
+                        </th>
+
+                        <th>
+                            <a th:text =  "${sqrew.getComment()}" > </a>
+                        </th>
+                    </tr>
+                </div>
+                </tbody>
+            </table>
+            <p></p>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
+
+
+

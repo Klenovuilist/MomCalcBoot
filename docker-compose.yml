@@ -1,0 +1,11 @@
+﻿
+services:
+  postgres:
+    container_name: 'PSQL226'
+    ports:
+      - '5433:5432'
+    environment:
+      - 'POSTGRES_PASSWORD=123'
+      - 'POSTGRES_USER=ev'
+      - 'POSTGRES_DB=evdb'
+    image: 'postgres:13.16'

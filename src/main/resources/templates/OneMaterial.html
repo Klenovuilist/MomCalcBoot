@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns="http://www.w3.org/1999/html" >
+
+
+<head>
+    <meta charset="UTF-8" lang="ru">
+    <title>Moment</title>
+    <link  href="/css/bootstrap.min.css" rel="stylesheet" >
+    <link  href="/css/style.css" rel="stylesheet" >
+
+
+</head>
+<body>
+<header>
+    <div class="container">
+        <div class="row">
+            <div class="col-5">
+                <h1 class="text-center text-white"> Moment thread</h1>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="container">
+    <div class="row">
+        <div class="col-5">
+
+      <p></p>
+            <table class="table table-bordered">
+                <thead>
+                <tr class="table-secondary table align-middle">
+                    <th>  </th>
+                        <th> <h6> Болтяра </h6> </th>
+                    <th>
+                        <h6> Гайка (материал детали)</h6>
+                    </th>
+                </tr>
+                </thead>
+
+                <tbody>
+                    <tr class="table-secondary table align-middle">
+                        <th> <h6> Материал детали </h6> </th>
+                        <th>  <a th:text="${material.getMaterials()}" > </a>  </th>
+                        <th>  <a th:text="${material.getMaterialScrew()}" > </a>  </th>
+
+                    </tr>
+                <tr class="table-danger table align-middle">
+                    <th> <h6> Класс прочности </h6> </th>
+                    <th>  <a th:text="${material.getStrengthClass()}" > </a>  </th>
+                    <th>  <a th:text="${material.getClassScrew()}" > </a>  </th>
+                </tr>
+
+                    <tr class="table-danger table align-middle">
+                        <th> <h6> Предел текучести, МПа </h6> </th>
+                        <th>  <a th:text="${material.getLimitStrength()}" > </a>  </th>
+                        <th>  <a th:text="${material.getLimitScrew()}" > </a>  </th>
+                    </tr>
+
+                </tbody>
+            </table>
+
+            <p></p>
+            <table class="table table-bordered">
+                <thead>
+                <tr class="table-secondary table align-middle">
+                    <th> Резьба </th>
+                    <div th:each = "moment: ${moments}" >
+                        <th>
+                            <a th:text = "${moment.getThread().getThread()}" >   </a>
+                        </th>
+                    </div>
+
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="table-danger table align-middle">
+                    <th> Момент затяжки Нм </th>
+                    <div th:each = "moment: ${moments}" >
+                        <th>
+                            <a th:text = "${moment.getMomentsNm()}" ></a>
+                        </th>
+                    </div>
+                </tr>
+
+                </tbody>
+            </table>
+            <p></p>
+            <div>
+                <h6>  Коэфф. глубины резьбы (h/d) <a th:text="${material.getKDepth()}" > </a>  </h6>
+            </div>
+            <p></p>
+
+            <div>
+                <h6> Коэфф. трения резьбы  <a th:text="${material.getCoeffFricThread()}" > </a>  </h6>
+            </div>
+            <p></p>
+
+            <div>
+                <h6> Коэфф. трения головки болты(гайки)  <a th:text="${material.getCoeffFricBoltHead()}" > </a>  </h6>
+            </div>
+            <p></p>
+
+            <div>
+                <h6> Коэфф. нагрузки  <a th:text="${material.getSafetyFactor()}" > </a>  </h6>
+            </div>
+            <p></p>
+
+            <form th:action  = "@{/materials_update/{id}(id = ${material.getId()})}" method = "GET">
+                <button class="btn btn-primary" id="submit1" type="submit"> Изменить </button>
+                <label for="submit1"></label>
+            </form>
+            <p></p>
+
+            <!-- Кнопка-триггер модального окна -->
+            <button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Удалить
+            </button>
+
+            <!-- Модальное окно -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel"></h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                        </div>
+                        <div class="modal-body">
+                            Удалить материал???
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                            <form th:action  = "@{/materials_delete/{id}(id = ${material.getId()})}" method = "GET">
+                                    <button type="submit" class="btn btn-primary">Удалить</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p></p>
+            <p></p>
+
+            <div>
+                <h5>  <a th:text="${material.getUser().getUserName()}" > </a>  </h5>
+            </div>
+            <div>
+                <h5>  <a th:text="${data}" > </a>  </h5>
+            </div>
+
+        </div>
+    </div>
+</div>
+<p></p>
+<p></p>
+<p></p>
+
+
+<script src="/js/bootstrap.bundle.min.js"></script>
+
+<footer>
+    <div class="conteiner">
+        <div class="row">
+            <div class="col-5">
+                <h4 class="text-center text-white"> EV</h4>
+            </div>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>
+
+
+
+
+
+
+
+dataForCalc.put("", "0");
+
+
+<!-- <h4>  Limit strength  </h4>
+
+<!DOCTYPE html>
+<html lang="ru" xmlns="http://www.w3.org/1999/html" >
+
+
+<style>
+
+</style>
+<head>
+    <meta charset="UTF-8" lang="ru">
+    <title>1</title>
+    <link  href="css/bootstrap.min.css" rel="stylesheet" >
+    <link  href="css/style.css" rel="stylesheet" >
+</head>
+
+
+</html>
+-->
