@@ -7,7 +7,7 @@ import com.ev.momcalcboot.repositoriy.SqrewDaoRepository;
 import com.ev.momcalcboot.repositoriy.UserDaoRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
-import lombok.var;
+
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Service;
 
@@ -224,7 +224,7 @@ public class SqrewService {
 
                     if (sqrew.getDepth() == null) {
                         sqrew.setDepth(Double.parseDouble(request.getParameter("depth" + sqrew.getId())));
-                        saveKey = true;
+                     saveKey = true;
                     } else if (Double.parseDouble(request.getParameter("depth" + sqrew.getId())) != sqrew.getDepth()) {
                         sqrew.setDepth(Double.parseDouble(request.getParameter("depth" + sqrew.getId())));
                         saveKey = true;

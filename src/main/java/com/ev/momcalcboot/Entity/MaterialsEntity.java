@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OptimisticLockType;
+import org.hibernate.annotations.OptimisticLocking;
 import org.springframework.data.annotation.CreatedDate;
 
 
@@ -18,7 +20,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-
+//@OptimisticLocking(type = OptimisticLockType.VERSION) // будет изм. версия строки при изменении одного из столбцов
 
 public class MaterialsEntity {
 
@@ -26,6 +28,10 @@ public class MaterialsEntity {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+//    @Version
+//    private  Long version;
+
 
     @Column(name = "limit_strength")
     private Integer limitStrength;

@@ -8,9 +8,10 @@ import com.ev.momcalcboot.repositoriy.BoltDaoRepository;
 import com.ev.momcalcboot.repositoriy.UserDaoRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
-import lombok.var;
+
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -74,6 +75,7 @@ public class BoltService {
      * @param request
      * @return
      */
+
     public BoltEntity getBoltByRequestParam(HttpServletRequest request) {
 
         var bolt = new BoltEntity();

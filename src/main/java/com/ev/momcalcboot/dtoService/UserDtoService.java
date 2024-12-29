@@ -39,8 +39,8 @@ import java.util.List;
                     .passwordUser(user.getPasswordUser())
                     .userName(user.getUserName())
                     .id(user.getId())
-                    .userBolts(user.getBoltEntities()).
-                    userSqrews(user.getSqrewEntities())
+                    .userBolts(user.getBoltEntities())
+                    .userSqrews(user.getSqrewEntities())
                     .build();
 
             userDto.setUserInfo(Arrays.asList(user.getUserName(), user.getRoleUser()
@@ -55,11 +55,11 @@ import java.util.List;
         return allUsersDto;
     }
 
-    public UserDto getUserDtoByIdWithMaterial(int id){
+    public UserDto getUserDtoByIdWithMaterial(int UserId){
 
-        UserEntity userEntity = userDaoRepository.getUserById(id);
+        UserEntity userEntity = userDaoRepository.getUserById(UserId);
 
-//        List <Materals_db> materals_dbs = materals_db_dao.getMaterialsByUserId(id);
+//        List <Materals_db> materals_dbs = materals_db_dao.getMaterialsByUserId(UserId);
 
         return UserDto.builder()
                 .userName(userEntity.getUserName())

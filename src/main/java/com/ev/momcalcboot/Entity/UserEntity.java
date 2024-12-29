@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CreationTimestamp;
 
 
@@ -48,6 +49,7 @@ public class UserEntity {
     private List<SqrewEntity> sqrewEntities;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @Cascade(org.hibernate.annotations.CascadeType.REMOVE)
     private List<BoltEntity> BoltEntities;
 
 }

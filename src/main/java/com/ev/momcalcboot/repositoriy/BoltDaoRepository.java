@@ -3,9 +3,11 @@ package com.ev.momcalcboot.repositoriy;
 import com.ev.momcalcboot.Entity.BoltEntity;
 import com.ev.momcalcboot.controller.ControllerError;
 import com.ev.momcalcboot.exceptions.FormatException;
-import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
 import java.util.List;
@@ -13,7 +15,7 @@ import java.util.Objects;
 
 
 @Service
-@Transactional
+@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)
 @AllArgsConstructor
 public class BoltDaoRepository {
 
@@ -31,7 +33,7 @@ public class BoltDaoRepository {
 
     public List<BoltEntity> getBoltByUserId(int id){
 
-        return boltRepository.findBoltsByUserId(id);
+        return boltRepository.findBoltsByUserId(id) ;
     }
 
         public void saveBolt(BoltEntity bolt){
@@ -39,7 +41,7 @@ public class BoltDaoRepository {
         boltRepository.save(bolt);
         }
 
-
+@Transactional()
         public boolean deleteBolt(int boltId){
 
         boolean result = false;

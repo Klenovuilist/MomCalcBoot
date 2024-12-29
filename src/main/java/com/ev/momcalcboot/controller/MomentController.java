@@ -494,6 +494,7 @@ public class MomentController {
     /**
      * Загрузка главной страницы (new)
      */
+    @SoutAOP
     @GetMapping("/moment_page_1") //moment_page_1
     public String moment_page_1(@RequestParam(value = "threadId", required = false) Integer threadId
             , Model model, HttpServletRequest request, HttpServletResponse response) {  // модель для отображения во view

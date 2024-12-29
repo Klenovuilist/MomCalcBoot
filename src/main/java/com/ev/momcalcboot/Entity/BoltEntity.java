@@ -1,26 +1,23 @@
 package com.ev.momcalcboot.Entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
+@Data
 @Entity()
 @Table(name = "bolt_entity")
-@Data
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
 
 public class BoltEntity {
 
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private int id;
 
     @Column(name = "bolt_name")
@@ -42,7 +39,25 @@ public class BoltEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_user", referencedColumnName = "id")
+
     private UserEntity user;
+
+    public BoltEntity(int id, String name, Integer limit, String comment, LocalDateTime dataCreate, Double classBolt, UserEntity user) {
+        this.id = id;
+        this.name = name;
+        this.limit = limit;
+        this.comment = comment;
+        this.dataCreate = dataCreate;
+        this.classBolt = classBolt;
+        this.user = user;
+    }
+
+    public BoltEntity() {
+    }
+
+    protected boolean canEqual(final Object other) {
+        return other instanceof BoltEntity;
+    }
 
 }
 

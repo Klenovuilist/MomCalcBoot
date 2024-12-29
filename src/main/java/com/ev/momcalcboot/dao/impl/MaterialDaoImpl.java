@@ -5,6 +5,7 @@ import com.ev.momcalcboot.dao.MaterialsDao;
 import jakarta.persistence.EntityManager;
 
 import jakarta.transaction.Transactional;
+import org.hibernate.LockMode;
 import org.hibernate.Session;
 
 import org.hibernate.query.Query;
@@ -47,6 +48,7 @@ public class MaterialDaoImpl implements MaterialsDao {
     @Override
     public void save(MaterialsEntity materialsEntity) {
         Session session = entityManager.unwrap(Session.class);
+        session.get(MaterialsEntity.class, 1, LockMode.OPTIMISTIC_FORCE_INCREMENT);
         session.save(materialsEntity);
     }
 
@@ -74,7 +76,6 @@ public class MaterialDaoImpl implements MaterialsDao {
 
         return query.getResultList();
     }
-
     @Transactional
     @Override
     public void updateMaterial(MaterialsEntity materals_entity) {

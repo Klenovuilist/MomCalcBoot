@@ -2,14 +2,17 @@ package com.ev.momcalcboot.repositoriy;
 
 
 import com.ev.momcalcboot.Entity.SqrewEntity;
-import jakarta.transaction.Transactional;
+
+
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
-@Transactional
+@Transactional(isolation = Isolation.READ_COMMITTED)
 @AllArgsConstructor
 
 public class SqrewDaoRepository {

@@ -1,6 +1,7 @@
 package com.ev.momcalcboot.repositoriy;
 
 import com.ev.momcalcboot.Entity.BoltEntity;
+import org.hibernate.LockMode;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -16,8 +17,9 @@ public interface BoltRepository extends JpaRepository<BoltEntity, Integer> {
 
       @Query("" +
 //              "select bolt " +
-              "FROM BoltEntity as bolt right join fetch bolt.user as u where u.id = :userId")
+              "FROM BoltEntity as bolt  where bolt.id = :userId")
       List<BoltEntity> findBoltsByUserId(@Param("userId") int userId);
+
 
 
 //"from MaterialsEntity m left join fetch m.momentsEntity r left join fetch r.thread" +

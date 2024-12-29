@@ -3,21 +3,30 @@ package com.ev.momcalcboot.controller;
 
 import com.ev.momcalcboot.Entity.BoltEntity;
 import com.ev.momcalcboot.Entity.SqrewEntity;
+import com.ev.momcalcboot.Entity.UserEntity;
+import com.ev.momcalcboot.dao.UserDao;
 import com.ev.momcalcboot.dto.UserDto;
 import com.ev.momcalcboot.dtoService.UserDtoService;
 
-import com.ev.momcalcboot.repositoriy.BoltDaoRepository;
-import com.ev.momcalcboot.repositoriy.SqrewDaoRepository;
+import com.ev.momcalcboot.repositoriy.*;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 @Data
+@Tag(name = "Тестовый рест контроллер")
 @AllArgsConstructor
 @RestController
 public class RestControllerTest {
@@ -28,11 +37,25 @@ public class RestControllerTest {
 
     private final SqrewDaoRepository sqrewDaoRepository;
 
-    @GetMapping("/allusers")
-    public List<UserDto> allUsers(){
+    private  final UserDaoRepository userDaoRepository;
 
-        return userDto.getAllUserDto();
+    private final TestRepository testRepository;
+
+
+    @GetMapping(value = "/allusers"/*, consumes = MediaType.APPLICATION_JSON_VALUE*/)
+
+    public List<UserEntity> allUsers(){
+
+        LinkedList <String> queue = new LinkedList<>();
+
+        ArrayList<String> list = new ArrayList();
+
+
+        return userDaoRepository.getAllUser();
+
     }
+
+
 
     @GetMapping("/")
     public String testView(){
@@ -42,6 +65,13 @@ public class RestControllerTest {
         List<SqrewEntity> sqrewEntities = sqrewDaoRepository.getSqrewByUserId(2);
 
             return "test_page.html";
+    }
+
+    @GetMapping("/test")
+    public UserEntity testQuery(){
+
+        return testRepository.getUsersByIdTest(2);
+
     }
 
     }

@@ -1,15 +1,14 @@
 package com.ev.momcalcboot.controller;
 
-import com.ev.momcalcboot.Entity.MaterialsEntity;
-import com.ev.momcalcboot.Entity.MomentsEntity;
-import com.ev.momcalcboot.Entity.UserEntity;
+import com.ev.momcalcboot.Entity.*;
 import com.ev.momcalcboot.dao.MaterialsDao;
 import com.ev.momcalcboot.dao.MomentsDao;
-import com.ev.momcalcboot.dto.MateralsDto;
 import com.ev.momcalcboot.dto.UserDto;
 import com.ev.momcalcboot.dtoService.MaterialDtoService;
 import com.ev.momcalcboot.dtoService.UserDtoService;
+import com.ev.momcalcboot.exceptions.FormatException;
 import com.ev.momcalcboot.service.internal.AdminService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,6 +23,7 @@ import java.util.List;
 @Controller
 @AllArgsConstructor
 @Data
+@Tag(name = "Admin")
 
 public class ControllerAdmin {
 
@@ -59,17 +59,22 @@ private  final MomentsDao momentsDao;
         return "adminPage.html";
 
     }
-    @GetMapping("/user/{id}")
-    public String userDetail(@PathVariable int id, Model model){
+    @GetMapping("/user/{userId}")
+    public String userDetail(@PathVariable int userId, Model model){
 
-        UserDto userDto = userDtoService.getUserDtoByIdWithMaterial(id);
+        UserDto userDto = userDtoService.getUserDtoByIdWithMaterial(userId);
 
-        List< MateralsDto> materalsDto = materialDtoService.getMaterialDtoByUserId(id);
+//        List< MateralsDto> materalsDto = materialDtoService.getMaterialDtoByUserId(id);
+
+        List<BoltEntity> bolts = adminService.getBoltByUserId(userId);
+        List<SqrewEntity> sqrews = adminService.getSqrewByUserId(userId);
+
 
         model.addAttribute("userDto", userDto);
 
-        model.addAttribute("materalsDto", materalsDto);
+        model.addAttribute("bolts", bolts);
 
+        model.addAttribute("sqrews", sqrews);
         return "user_info.html";
     }
     @PostMapping("/user_save_changes")
@@ -100,9 +105,34 @@ private  final MomentsDao momentsDao;
         materialsDao.materialRemove(materals_entity);
 
 
-
         return "redirect:/user_info.html";
     }
 
+        @GetMapping("/bolt_delete/{id}/{userId}")
+        public String deleteBoltById(@PathVariable("id") int boltId, @PathVariable("userId") int userId, Model model ){
+        try {
+//            int userId = Integer.parseInt(request.getParameter("userId"));
+            adminService.deleteBoltById(boltId);
+
+            return "redirect:/user/" + userId;
+        }
+
+        catch (FormatException f){
+            model.addAttribute("error", f.getMessage());
+                return "error_page.html";
+        }
+            }
+@GetMapping("/sqrew_delete/{id}/{userId}")
+    public String deleteSqrewById(@PathVariable("id") int id, @PathVariable("userId") int userId, Model model){
+        try {
+            adminService.deleteSqrewById(id);
+            return "redirect:/user/" + userId;
+        }
+        catch (FormatException f){
+
+            model.addAttribute("error", f.getMessage());
+            return "error_page.html";
+        }
+        }
 
 }
