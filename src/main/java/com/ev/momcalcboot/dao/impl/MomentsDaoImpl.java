@@ -4,6 +4,7 @@ import com.ev.momcalcboot.Entity.MomentsEntity;
 import com.ev.momcalcboot.dao.MomentsDao;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
+import org.hibernate.LockMode;
 import org.hibernate.Session;
 
 import org.hibernate.query.Query;
