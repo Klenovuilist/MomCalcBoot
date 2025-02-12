@@ -92,6 +92,9 @@ private  final MomentsDao momentsDao;
 
     }
 
+    /**
+     * Удаление материала по id
+     */
     @GetMapping("material_delete/{id}")
     public String materialDeleteAdmin(@PathVariable("id") int id){
 
