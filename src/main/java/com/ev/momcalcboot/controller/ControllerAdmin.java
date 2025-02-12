@@ -129,7 +129,16 @@ private  final MomentsDao momentsDao;
                 return "error_page.html";
         }
             }
-@GetMapping("/sqrew_delete/{id}/{userId}")
+
+    /**
+     *
+     * @param id
+     * @param userId
+     * @param model
+     * @return
+     * Удалить материал по юзер id и id материала
+     */
+    @GetMapping("/sqrew_delete/{id}/{userId}")
     public String deleteSqrewById(@PathVariable("id") int id, @PathVariable("userId") int userId, Model model){
         try {
             adminService.deleteSqrewById(id);
