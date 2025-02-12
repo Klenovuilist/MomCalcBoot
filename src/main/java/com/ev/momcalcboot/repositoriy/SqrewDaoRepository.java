@@ -51,20 +51,19 @@ public class SqrewDaoRepository {
      * ?????????? sqrew ? ??
      * @param sqrew
      */
-    public void updateSqrew(SqrewEntity sqrew){
+    public void updateSqrew(SqrewEntity sqrew) {
 
         saveSqrew(getSqrewById(sqrew.getId()));
     }
 
-    public boolean deleteSqrew(int sqrewId){
+    public boolean deleteSqrew(int sqrewId) {
 
         SqrewEntity sqrew = getSqrewById(sqrewId);
 
         try {
             sqrewRepository.delete(sqrew);
             return true;
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
     }

@@ -1,6 +1,10 @@
 package com.ev.momcalcboot.controller;
 
-import com.ev.momcalcboot.Entity.*;
+import com.ev.momcalcboot.Entity.BoltEntity;
+import com.ev.momcalcboot.Entity.MaterialsEntity;
+import com.ev.momcalcboot.Entity.MomentsEntity;
+import com.ev.momcalcboot.Entity.SqrewEntity;
+import com.ev.momcalcboot.Entity.UserEntity;
 import com.ev.momcalcboot.dao.MaterialsDao;
 import com.ev.momcalcboot.dao.MomentsDao;
 import com.ev.momcalcboot.dto.UserDto;

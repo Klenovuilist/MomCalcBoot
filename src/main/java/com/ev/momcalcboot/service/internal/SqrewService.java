@@ -187,20 +187,20 @@ public class SqrewService {
 
 
                 if (Strings.isNotBlank(request.getParameter("name" + sqrew.getId())) &&
-                        ! request.getParameter("name" + sqrew.getId()).equals(sqrew.getName())) {
+                        !request.getParameter("name" + sqrew.getId()).equals(sqrew.getName())) {
 
                     sqrew.setName(request.getParameter("name" + sqrew.getId()));
                     saveKey = true;
                 }
 
 
-                if (Strings.isNotBlank(request.getParameter("limit" + sqrew.getId()))){
+
+                if (Strings.isNotBlank(request.getParameter("limit" + sqrew.getId()))) {
 
                     if (sqrew.getLimit() == null) {
                         sqrew.setLimit(Integer.parseInt(request.getParameter("limit" + sqrew.getId())));
                         saveKey = true;
-                    }
-                    else if (Integer.parseInt(request.getParameter("limit" + sqrew.getId())) != sqrew.getLimit()) {
+                    } else if (Integer.parseInt(request.getParameter("limit" + sqrew.getId())) != sqrew.getLimit()) {
                         sqrew.setLimit(Integer.parseInt(request.getParameter("limit" + sqrew.getId())));
                         saveKey = true;
                     }
@@ -292,14 +292,15 @@ public class SqrewService {
                 depth = Double.parseDouble(request.getParameter("sqrew_depth_new"));
             }
 
-            if (Strings.isNotBlank(request.getParameter("sqrew.comment_new"))){
+            if (Strings.isNotBlank(request.getParameter("sqrew.comment_new"))) {
 
                 commets = request.getParameter("sqrew.comment_new");
 
             }
         }
 
-        if (saveKey && Objects.nonNull(UserId)){
+
+        if (saveKey && Objects.nonNull(UserId)) {
             UserEntity user = userDao.getUserById(UserId);
 
             sqrewDaoRepository.saveSqrew(
@@ -317,8 +318,7 @@ public class SqrewService {
 
             return true;
 
-        }
-        else {
+        } else {
             return false;
         }
     }

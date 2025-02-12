@@ -6,6 +6,7 @@ import com.ev.momcalcboot.exceptions.FormatException;
 import com.ev.momcalcboot.repositoriy.UserDaoRepository;
 import com.ev.momcalcboot.service.internal.BoltService;
 import com.ev.momcalcboot.service.internal.CookService;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +18,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+
 import java.util.List;
+import java.util.Objects;
 
 @AllArgsConstructor
 @Controller()
@@ -39,15 +42,27 @@ public class ControllerBolt {
     @GetMapping("/all_bolt")
     public String viewAllBolt(Model model, HttpServletRequest request){
         log.info("Открытие страницы с болтами");
+
         /**
          * получение польз. из куков
          */
 
+        Cookie cookieUserId = cookService.findCookByName(request, CookiesParametr.USERID.getParam());
+        // если пользователь не получен - вернуть на регистрацию
+        if (Objects.isNull(cookieUserId))
+        {
+            return "redirect:/user_registration";
+        }
 
-         Integer userId = Integer.parseInt(cookService.findCookByName(request, CookiesParametr.USERID.getParam()).getValue());
+         Integer userId = Integer.parseInt(cookieUserId.getValue());
         model.addAttribute("user", userDaoRepository.getUserById(userId));
 
-        String userName = cookService.findCookByName(request, CookiesParametr.USERNAME.getParam()).getValue();
+        Cookie cookieUserName = cookService.findCookByName(request, CookiesParametr.USERNAME.getParam());
+        String userName = cookieUserName.getValue();
+
+
+
+
 
         log.info("Получен пользователь из куков id = {}, имя: {}", userId, userName);
 

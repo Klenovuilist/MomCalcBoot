@@ -4,10 +4,13 @@ import com.ev.momcalcboot.Entity.MaterialsEntity;
 import com.ev.momcalcboot.dao.MaterialsDao;
 import jakarta.persistence.EntityManager;
 
+import jakarta.persistence.LockModeType;
 import jakarta.transaction.Transactional;
 import org.hibernate.LockMode;
 import org.hibernate.Session;
 
+import org.hibernate.annotations.OptimisticLock;
+import org.hibernate.annotations.OptimisticLockType;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -71,7 +74,7 @@ public class MaterialDaoImpl implements MaterialsDao {
     public List getMaterialsByUserId(int UserId) {
 
     Session session = entityManager.unwrap(Session.class);
-        Query query = session.createQuery("from MaterialsEntity where user.id = :idUser", MaterialsEntity.class);
+        Query query = session.createQuery("from MaterialsEntity where user.id = :idUser", MaterialsEntity.class).setLockMode(LockModeType.OPTIMISTIC);
         query.setParameter("idUser", UserId);
 
         return query.getResultList();

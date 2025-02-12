@@ -5,6 +5,7 @@ import com.ev.momcalcboot.enums.CookiesParametr;
 import com.ev.momcalcboot.repositoriy.UserDaoRepository;
 import com.ev.momcalcboot.service.internal.CookService;
 import com.ev.momcalcboot.service.internal.SqrewService;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
+import java.util.Objects;
 
 @AllArgsConstructor
 @Controller()
@@ -38,7 +40,12 @@ public class ControllerSqrew {
         /**
          * получение id польз. из куков
          */
-
+        Cookie cookieUserId = cookService.findCookByName(request, CookiesParametr.USERID.getParam());
+        // если пользователь не получен - вернуть на регистрацию
+        if (Objects.isNull(cookieUserId))
+        {
+            return "redirect:/user_registration";
+        }
 
          Integer userId = Integer.parseInt(cookService.findCookByName(request, CookiesParametr.USERID.getParam()).getValue());
         model.addAttribute("user", userDaoRepository.getUserById(userId));
