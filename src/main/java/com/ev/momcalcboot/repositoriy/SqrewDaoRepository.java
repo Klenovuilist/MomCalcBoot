@@ -68,5 +68,15 @@ public class SqrewDaoRepository {
         }
     }
 
+    public List<SqrewEntity> getAdminSqrew(){
+
+        return sqrewRepository.findAdminSqrew();
+    }
+
+    public List<SqrewEntity> getAllsqrews(){
+        return sqrewRepository.findAll();
+    }
+
+
 
 }

@@ -55,10 +55,22 @@ public class BoltEntity {
     public BoltEntity() {
     }
 
+    @Override
+    public String toString() {
+        return "BoltEntity{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", limit=" + limit +
+                '}';
+    }
+
     protected boolean canEqual(final Object other) {
+
         return other instanceof BoltEntity;
     }
 
 }
+
+
 
 //name limit comment dataCreate classBolt

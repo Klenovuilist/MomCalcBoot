@@ -781,7 +781,7 @@ public class MomentController {
 
 
     @GetMapping("/moment_page_1/{id}")
-        public String viewOneMaterial ( @PathVariable int id, HttpServletRequest request, Model model){
+        public String viewOneMaterial ( @PathVariable("id") int id, HttpServletRequest request, Model model){
 
             MaterialsEntity materals_entity = materialsDao.getMaterialsById(id);
             List<MomentsEntity> moments_entities = materals_entity.getMomentsEntity();

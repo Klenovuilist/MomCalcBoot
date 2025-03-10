@@ -52,4 +52,12 @@ public class UserEntity {
     @Cascade(org.hibernate.annotations.CascadeType.REMOVE)
     private List<BoltEntity> BoltEntities;
 
+    @Override
+    public String toString() {
+        return "UserEntity{" +
+                "id=" + id +
+                ", userName='" + userName + '\'' +
+                ", roleUser='" + roleUser + '\'' +
+                '}';
+    }
 }

@@ -41,7 +41,7 @@ public class SqrewService {
      */
     public List<SqrewEntity> getSqrewsAdmin(){
 
-        return  sqrewDaoRepository.getSqrewByUserId(1);
+        return  sqrewDaoRepository.getAdminSqrew();
     }
 
     /**

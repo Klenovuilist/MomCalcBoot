@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 
+
 public class SqrewEntity {
 
     @Id
@@ -47,4 +48,13 @@ public class SqrewEntity {
     @JoinColumn(name = "id_user", referencedColumnName = "id")
     private UserEntity user;
 
+
+    @Override
+    public String toString() {
+        return "SqrewEntity{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", limit=" + limit +
+                '}';
+    }
 }

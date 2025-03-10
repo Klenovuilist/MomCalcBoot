@@ -24,7 +24,9 @@ public class ThreadDaoImpl implements ThreadDao {
     @Override
     public List<ThreadEntity> getThread() {
 
-        return entityManager.unwrap(Session.class).createQuery("from ThreadEntity", ThreadEntity.class).getResultList();
+        return entityManager.unwrap(Session.class)
+                .createQuery("from ThreadEntity", ThreadEntity.class)
+                .getResultList();
     }
 }
 

@@ -4,8 +4,6 @@
         password_user varchar (30),
         role_user varchar (30),
         data_user date
-
-
 );
 
 alter TABLE materals_db ADD COLUMN user_id bigint references users (id);
