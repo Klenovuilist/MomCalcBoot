@@ -36,9 +36,9 @@ public class BoltDaoRepository {
         return boltRepository.findBoltsByUserId(id) ;
     }
 
-        public void saveBolt(BoltEntity bolt){
+    public void saveBolt(BoltEntity bolt){
 
-        boltRepository.save(bolt);
+      boltRepository.save(bolt);
         }
 
 @Transactional()
@@ -62,5 +62,13 @@ public class BoltDaoRepository {
                     }
             return result;
         }
+        public List<BoltEntity> getAdminBolts(){
 
+        return boltRepository.findAdminBolts();
+        }
+
+        public List<BoltEntity> getAllBolts(){
+        return boltRepository.findAll();
+
+        }
 }

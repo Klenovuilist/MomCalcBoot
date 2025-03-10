@@ -61,9 +61,6 @@ public class ControllerBolt {
         String userName = cookieUserName.getValue();
 
 
-
-
-
         log.info("Получен пользователь из куков id = {}, имя: {}", userId, userName);
 
         /**

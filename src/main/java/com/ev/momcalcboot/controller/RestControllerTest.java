@@ -14,10 +14,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 import java.util.ArrayList;
@@ -57,14 +54,14 @@ public class RestControllerTest {
 
 
 
-    @GetMapping("/")
-    public String testView(){
+    @GetMapping("/{id}")
+    public String testView(@PathVariable("id") int id){
 
-        boltDaoRepository.getBoltById(1);
-        List<BoltEntity> boltEntities = boltDaoRepository.getBoltByUserId(1);
-        List<SqrewEntity> sqrewEntities = sqrewDaoRepository.getSqrewByUserId(2);
+//        boltDaoRepository.getBoltById(1);
+//        List<BoltEntity> boltEntities = boltDaoRepository.getBoltByUserId(1);
+//        List<SqrewEntity> sqrewEntities = sqrewDaoRepository.getSqrewByUserId(2);
 
-            return "test_page.html";
+            return "test_page.html id = " + id;
     }
 
     @GetMapping("/test")

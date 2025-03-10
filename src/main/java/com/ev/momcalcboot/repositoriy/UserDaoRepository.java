@@ -20,6 +20,7 @@ public class UserDaoRepository {
     }
 
     public List<UserEntity> getAllUser(){
+
         return userRepository.findAll();
     }
 

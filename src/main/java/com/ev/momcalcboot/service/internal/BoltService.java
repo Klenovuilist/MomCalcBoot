@@ -50,7 +50,7 @@ public class BoltService {
      */
     public List<BoltEntity> boltsAdmin(){
 
-        return  boltDaoRepository.getBoltByUserId(1);
+        return  boltDaoRepository.getAdminBolts();
     }
 
     /**
@@ -148,14 +148,12 @@ public class BoltService {
         var bolt = boltDaoRepository.getBoltById(Integer.parseInt(request.getParameter("boltId")));
 
         if (Objects.nonNull(bolt)){
-
             /**
              *
              */
             String limit = request.getParameter("limitBolt");
 
             if (Strings.isNotBlank(limit)) {
-
                 bolt.setLimit(Integer.parseInt(limit));
             }
 
@@ -166,7 +164,6 @@ public class BoltService {
             String name = request.getParameter("name");
 
             if (Strings.isNotBlank(name)) {
-
                 bolt.setName(name);
             }
 
@@ -176,7 +173,6 @@ public class BoltService {
             String comments = request.getParameter("comments");
 
             if (Strings.isNotBlank(comments)) {
-
                 bolt.setComment(comments);
             }
 
@@ -187,7 +183,6 @@ public class BoltService {
             String classBolt = request.getParameter("classBolt");
 
             if (Strings.isNotBlank(classBolt)) {
-
                 bolt.setClassBolt(Double.parseDouble(classBolt));
             }
 
@@ -212,7 +207,7 @@ public class BoltService {
     }
 
     /**
-     *111
+
      */
     public BoltEntity getBoltByRequestBoltIdOrParam(List<BoltEntity> bolts, HttpServletRequest request) {
 

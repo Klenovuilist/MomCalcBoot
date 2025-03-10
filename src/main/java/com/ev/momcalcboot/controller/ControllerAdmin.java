@@ -64,7 +64,7 @@ private  final MomentsDao momentsDao;
 
     }
     @GetMapping("/user/{userId}")
-    public String userDetail(@PathVariable int userId, Model model){
+    public String userDetail(@PathVariable("userId") int userId, Model model){
 
         UserDto userDto = userDtoService.getUserDtoByIdWithMaterial(userId);
 
