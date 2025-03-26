@@ -1,5 +1,6 @@
 package com.ev.momcalcboot.service.internal;
 
+import com.ev.momcalcboot.Entity.BoltEntity;
 import com.ev.momcalcboot.Entity.SqrewEntity;
 import com.ev.momcalcboot.Entity.UserEntity;
 import com.ev.momcalcboot.dao.UserDao;
@@ -12,6 +13,7 @@ import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -32,7 +34,18 @@ public class SqrewService {
      */
     public List<SqrewEntity> getSqrewsByUserId(int userId){
 
-        return sqrewDaoRepository.getSqrewByUserId(userId);
+        List<SqrewEntity> sqrewEntities = sqrewDaoRepository.getSqrewByUserId(userId);
+
+        if(! sqrewEntities.isEmpty()){
+            DateTimeFormatter dataFormater = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
+
+            for (SqrewEntity sqrew: sqrewEntities){
+                sqrew.setDataCreatePars(dataFormater.format(sqrew.getDataCreate()));
+            }
+
+        }
+
+        return sqrewEntities;
     }
 
     /**

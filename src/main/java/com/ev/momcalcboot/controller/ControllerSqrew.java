@@ -53,7 +53,7 @@ public class ControllerSqrew {
         /**
          * Список болтов админа (id =1)
          */
-        model.addAttribute("sqrewsAdmin", sqrewService.getSqrewsByUserId(1));
+        model.addAttribute("sqrewsAdmin", sqrewService.getSqrewsAdmin());
 
         /**
          * Список болтов польз по его id

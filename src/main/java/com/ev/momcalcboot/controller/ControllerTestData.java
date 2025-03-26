@@ -49,8 +49,10 @@ public class ControllerTestData {
 
     private String sql = "no sql request";
 
+    int i = 0;
+
     @GetMapping("/test_data")
-    public String getTestPage(Model model) {
+    public String getTestPage(Model model) throws InterruptedException {
 
 //    Map<String,Boolean> resultLoadMap = testDatalLoad.loadBdTestData();
         if (resultLoadMap.isEmpty()) {
@@ -77,6 +79,13 @@ public class ControllerTestData {
             model.addAttribute("allThreads", threadDTOList);
 
         }
+        model.addAttribute("sql1", sql);
+
+//        i++;
+//        if (i % 2 > 0){
+//            Thread.sleep(10_000);//
+//        }//
+//        System.out.println("cont = " + i + "  Thread = " + Thread.currentThread().getName());
 
         return "test.html";
     }
@@ -101,7 +110,7 @@ public class ControllerTestData {
             threadDTOList.addAll(threadDtoService.getAllThreadDto());
         }
 
-        model.addAttribute("sql", sql);
+
 
         return "redirect:/test_data";
 

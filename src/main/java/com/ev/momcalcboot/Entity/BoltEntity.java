@@ -1,8 +1,7 @@
 package com.ev.momcalcboot.Entity;
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
@@ -42,7 +41,10 @@ public class BoltEntity {
 
     private UserEntity user;
 
-    public BoltEntity(int id, String name, Integer limit, String comment, LocalDateTime dataCreate, Double classBolt, UserEntity user) {
+    @Transient
+    private String dataCreateParsing;
+
+    public BoltEntity(int id, String name, Integer limit, String comment, LocalDateTime dataCreate, Double classBolt, UserEntity user, String dataCreateParsing) {
         this.id = id;
         this.name = name;
         this.limit = limit;
@@ -50,18 +52,10 @@ public class BoltEntity {
         this.dataCreate = dataCreate;
         this.classBolt = classBolt;
         this.user = user;
+        this.dataCreateParsing = dataCreateParsing;
     }
 
     public BoltEntity() {
-    }
-
-    @Override
-    public String toString() {
-        return "BoltEntity{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", limit=" + limit +
-                '}';
     }
 
     protected boolean canEqual(final Object other) {

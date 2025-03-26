@@ -11,6 +11,7 @@ import com.ev.momcalcboot.service.internal.*;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -497,7 +498,7 @@ public class MomentController {
     @SoutAOP
     @GetMapping("/moment_page_1") //moment_page_1
     public String moment_page_1(@RequestParam(value = "threadId", required = false) Integer threadId
-            , Model model, HttpServletRequest request, HttpServletResponse response) {  // модель для отображения во view
+            , Model model, HttpServletRequest request, HttpServletResponse response) throws InterruptedException {  // модель для отображения во view
         System.out.println("@GetMapping(/moment_page_1");
 
         int userId = 0;

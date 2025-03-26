@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -224,7 +225,21 @@ public class BoltService {
      * 1111
      */
     public List<BoltEntity> getBoltByUserId(int userId){
-        return boltDaoRepository.getBoltByUserId(userId);
+
+            List<BoltEntity> boltEntities = boltDaoRepository.getBoltByUserId(userId);
+
+            if (! boltEntities.isEmpty()){
+                DateTimeFormatter dataFormater = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
+
+                for (BoltEntity bolt: boltEntities){
+
+                    bolt.setDataCreateParsing(dataFormater.format(bolt.getDataCreate()));
+                }
+            }
+
+
+
+        return boltEntities;
     }
 
 

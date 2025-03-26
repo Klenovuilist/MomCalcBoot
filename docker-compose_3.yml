@@ -1,17 +1,26 @@
-﻿version: "3.8"
+﻿
+version: "3.8"
 
 services:
   postgres:
     container_name: 'PSQL_Moment'
+
+# Порты контейнера
+# При подключении к БД из вне контейнера использовать localhost и внешний порт
     ports:
-      - '5303:5432'
+      - '5304:5303'
     environment:
       POSTGRES_PASSWORD: 123
       POSTGRES_USER: postgres
-      POSTGRES_DB: MomentNM
-    image: 'postgres:15.1'
+      POSTGRES_DB: MomentNM_D
+    image: postgres:15-alpine
 
-
+#  команда после установки образа:
+#  изменение порта для postgres - должен совпадать с внутренним портом контейнера
+    command:
+      - "postgres"
+      - "-c"
+      - "port=5303"
 
   app:
     build:
@@ -23,17 +32,15 @@ services:
     ports:
 #      внутренний порт такой же как в апликешин, внешний любой
       - "8067:8077"
+
 #      порт для удаленного дебага 5005 по умолчанию
       - "5004:5004"
     environment:
 #      port: 8077
       spring.datasource.username: postgres
 #      URL для подключения к внутреней сети Docker - "postgres" как в разделе services
-#      вместо localhost подключение по внутренней сети docker
-#      к БД //postgres - тоже имя что и services:
-      #  postgres:
-
-      spring.datasource.url: jdbc:postgresql://postgres/MomentNM
+#      + порт //postgres:5303 если изменен (стандарт 5432 допускается не писать)
+      spring.datasource.url: jdbc:postgresql://postgres:5303/MomentNM_D
       spring.datasource.password: 123
 
 
