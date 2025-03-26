@@ -66,7 +66,7 @@ public class ControllerBolt {
         /**
          * Список болтов админа (id =1)
          */
-        model.addAttribute("boltsAdmin", boltService.getBoltByUserId(1));
+        model.addAttribute("boltsAdmin", boltService.getBoltByUserId(2));
 
         /**
          * Список болтов польз по его id
