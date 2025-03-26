@@ -288,6 +288,12 @@
       <version>2.6.0</version>
       <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-actuator</artifactId>
+      <version>3.3.2</version>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
   <properties>
     <org.mapstruct.version>1.5.2.Final</org.mapstruct.version>

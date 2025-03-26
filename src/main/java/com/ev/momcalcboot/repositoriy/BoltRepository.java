@@ -1,7 +1,9 @@
 package com.ev.momcalcboot.repositoriy;
 
 import com.ev.momcalcboot.Entity.BoltEntity;
-import org.hibernate.LockMode;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -14,11 +16,30 @@ public interface BoltRepository extends JpaRepository<BoltEntity, Integer> {
    
 //      List<BoltEntity> findBoltEntityByUserId(int userId);
 
+      /**
+       * Получение болтов с пагинацией
+       * @param userId
 
+       * @return
+       */
+      @Query("" +
+//              "select bolt " +
+              "FROM BoltEntity as bolt  where bolt.user.id = :userId")
+      Page<BoltEntity> findBoltsByUserId(@Param("userId") int userId, Pageable pageable);
+
+      /**
+       * получение всех болтов всех
+       * @param userId
+       * @return
+       */
       @Query("" +
 //              "select bolt " +
               "FROM BoltEntity as bolt  where bolt.user.id = :userId")
       List<BoltEntity> findBoltsByUserId(@Param("userId") int userId);
+
+
+
+      List<BoltEntity> findAll();
 
 
       @Query(value = "select bolt_entity.id, bolt_name, bolt_limit, id_user, comment, data_create, classbolt from bolt_entity" +

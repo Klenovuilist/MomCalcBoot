@@ -110,7 +110,7 @@ class MomCalcBootApplicationTests {
 
         Mockito.doReturn(1).when(user1).getId();
 
-        List<SqrewEntity> sqrews = sqrewService.getSqrewsByUserId(user1.getId());
+        List<SqrewEntity> sqrews = sqrewDaoRepository.getSqrewByUserId(user1.getId());
 
     Assertions.assertThat(!sqrews.isEmpty()).isTrue();
 
