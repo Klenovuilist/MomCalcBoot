@@ -1,0 +1,58 @@
+﻿# для запуска на сервере с докер файлом
+version: "3.8"
+
+services:
+  postgres:
+    container_name: 'PSQL_Moment'
+
+# Порты контейнера
+# При подключении к БД из вне контейнера использовать localhost и внешний порт
+    ports:
+      - '5304:5303'
+    environment:
+      POSTGRES_PASSWORD: 123
+      POSTGRES_USER: postgres
+      POSTGRES_DB: MomentNM_D
+    image: postgres:15-alpine
+
+#  команда после установки образа:
+#  изменение порта для postgres - должен совпадать с внутренним портом контейнера
+    command:
+      - "postgres"
+      - "-c"
+      - "port=5303"
+    volumes: # назначение собственной папки для хранения БД
+      - type: bind
+        source: ./pgdata_226 # предварительно создать папку относитель докер-компоуз
+        target: /var/lib/postgresql/data
+        read_only: false
+
+  app:
+    build:
+#       . - текущая папка с docker файлом
+      context: .
+#      сборка образа приложения по docker файлом
+      dockerfile: Dockerfile
+
+    container_name: moment_calc
+    ports:
+#      внешний порт любой(80 или 443 что бы не вводить при зпросе)
+#      внутренний порт такой же как в апликешин - связь контейнера с приложением
+
+      - "8000:8077"
+
+#      порт для удаленного дебага 5005 по умолчанию
+      - "5004:5004"
+    environment:
+#      port: 8077
+      spring.datasource.username: postgres
+#      URL для подключения к внутреней сети Docker - "postgres" как в разделе services
+#      + порт //postgres:5303 если изменен (стандарт 5432 допускается не писать)
+      spring.datasource.url: jdbc:postgresql://postgres:5303/MomentNM_D
+      spring.datasource.password: 123
+
+
+    depends_on:
+      - postgres
+
+

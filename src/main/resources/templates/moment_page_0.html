@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MomentByMaterial</title>
+</head>
+
+<body>
+<!-- action="/moment_page_1" -->
+<form method="get">
+  <p>
+    <label for="thread">Thread:</label>
+    <select id="thread" name="threadId">
+
+      <div th:each = "thread: ${threads}" >
+
+        <option th:value= "${thread.getId}" > <a th:text = "${thread.getThread()}" > </a> </option>
+
+      </div>
+    </select>
+  </p>
+  <p>
+    <input type="submit" value="Apply" />
+  </p>
+</form>
+
+<br>
+<br>
+<p>
+<p>
+
+<table>
+
+  <thead>
+  <tr>
+    <th> Material </th>
+    <div th:each = "material: ${materials}" >
+      <th>
+        <a th:href = "@{/moment_page_1/{id}(id = ${material.getId()})}" > <p th:text="${material.getMaterials()}"></p> </a>
+      </th>
+    </div>
+
+  </tr>
+  </thead>
+
+  <tbody>
+  <tr>
+    <th> Moment Nm </th>
+    <div th:each = "moment: ${moments}" >
+      <th>
+        <a th:text = "${moment.getMomentsNm()}" >   </a>
+      </th>
+    </div>
+  </tr>
+  <tr>
+    <th> Limit MPa </th>
+    <div th:each = "material: ${materials}" >
+      <th>
+        <a th:text = "${material.getLimit_strength()}" >   </a>
+      </th>
+    </div>
+
+  </tr>
+
+
+  </tbody>
+</table>
+
+
+
+
+<form action = "/materials_create" method = "get">
+  <button type="submit"> Add+</button>
+</form>
+
+</body>
+</html>

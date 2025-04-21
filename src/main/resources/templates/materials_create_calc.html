@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" lang="ru">
+    <title>Moment</title>
+    <link  href="/css/bootstrap.min.css" rel="stylesheet" >
+    <link  href="/css/style.css" rel="stylesheet" >
+</head>
+<body>
+<header>
+    <div class="container" >
+        <div class="row" >
+            <div class="col-5" >
+                <h1 class="text-center text-white"> Moment thread</h1>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="container">
+    <div class="row">
+        <div class="col-8">
+            <p></p>
+            <div>
+                <a href = "/user_registrationEnter" > <p th:text=" ${userName} "> </p> </a>
+            </div>
+            <p></p>
+
+
+            <!--  -->
+            <form  id="form_1" method="POST" action="/materials_create_calc">
+
+                <table class="table table-bordered">
+                    <thead>
+                    <tr class="table-secondary table align-middle">
+                        <th>
+                            <label for="materials">Материал (болт)</label>
+                            <input th:type="text" class="btn btn-light" th:value = "${material.getMaterials()}"
+                                   id="materials" name ="materials"/>
+                        </th>
+
+                        <th>
+                            <label for="limit_strength">Предел текучести, МПа (болт)</label>
+                            <input th:type="text" class="btn btn-light" name="limit_strength" id="limit_strength"
+                                   th:value ="${material.getLimitStrength()}"/>
+                        </th>
+                        <th>
+                            <label for="strengthClass">Класс прочности (болт)</label>
+                            <input th:type="text" class="btn btn-light" name="strengthClass" id="strengthClass"
+                                   th:value ="${material.getStrengthClass()}"/>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="table-danger table align-middle">
+                        <th>
+                            <label for="materialScrew">Материал (гайка)</label>
+                            <input th:type="text" class="btn btn-light"  id="materialScrew" name ="materialScrew"
+                                   th:value ="${material.getMaterialScrew()}"/>
+                        </th>
+                        <th>
+                            <label for="limitScrew">Предел текучести, MПа (гайка)</label>
+                            <input th:type="text" class="btn btn-light" name="limitScrew" id="limitScrew"
+                                   th:value ="${material.getLimitScrew()}"/>
+
+                        </th>
+                        <th>
+                            <label for="classScrew">Класс прочности (гайка)</label>
+                            <input th:type="text" class="btn btn-light" name="classScrew" id="classScrew"
+                                   th:value ="${material.getClassScrew()}"/>
+                        </th>
+                    </tr>
+                    </tbody>
+                </table>
+
+                </p>
+                <table class="table table-bordered">
+                    <thead>
+                    <tr class="table-secondary table align-middle">
+                        <th> Резьба </th>
+                        <div th:each = "moment: ${moments}" >
+                            <th>
+                                <p th:text="${moment.getThread().getThread()}"> </p>
+                            </th>
+                        </div>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="table-danger table align-middle">
+                        <th> Момент затяжки Нм </th>
+                        <div th:each = "moment: ${moments}" >
+                            <th>
+                                <input type="text" class="btn btn-light" th:name="${moment.getThread().getThread()}" th:value="${moment.getMomentsNm()}"  size="6"
+                                       th:id="'thread' + ${moment.getThread().getThread()}"/>
+
+                            </th>
+                        </div>
+                    </tr>
+                    <tr>
+                    </tbody>
+                </table>
+
+                <input th:type="text" class="btn btn-outline-secondary" name="kDepth" id="kDepth"
+                       th:value ="${material.getKDepth()}"/>
+                <label for="kDepth">Коэфф. длины резьбы = h/d,
+                    для стали:  0,8...1,2,
+                    для аллюм. сплав.: 1,2...1,5</label>
+                <p></p>
+
+                <input th:type="text" class="btn btn-outline-secondary" name="coeffFricBoltHead" id="coeffFricBoltHead"
+                       th:value ="${material.getCoeffFricBoltHead()}"/>
+                <label for="CoeffFricBoltHead"> коэфф. трения головки болта(гайки)(0.12...0.34)</label>
+                <p></p>
+                <input th:type="text" class="btn btn-outline-secondary" name="сoeffFricThread" id="сoeffFricThread"
+                       th:value ="${material.getCoeffFricThread()}"/>
+                <label for="сoeffFricThread"> коэфф. трения резьбы (0.12...0.34)</label>
+                <p></p>
+                <input th:type="text" class="btn btn-outline-secondary" name="safetyFactor" id="safetyFactor"
+                       th:value ="${material.getSafetyFactor()}"/>
+                <label for="safetyFactor"> коэфф. нагрузки (0.5...1,0)</label>
+                <p></p>
+                <input th:type="text" class="btn btn-outline-secondary" name="comments" th:value ="${material.getComments()}" id="comment"/>
+                <label for="comment">Комментарии </label>
+                <p></p>
+
+
+                <div class="d-grid gap-2 d-md-block">
+                    <!-- Кнопка-триггер модального окна сохранить -->
+                    <button type="submit" class="btn btn-primary"  id="submitSave">Сохранить</button>
+                    <button type="submit" id="submitCalc" class="btn btn-primary">Пересчитать моменты</button>
+                </div>
+                <p></p>
+            </form>
+
+            <form action="/" method = "GET">
+                <button type="submit" id="submitApp" class="btn btn-primary">На главную</button>
+            </form>
+            <p></p>
+
+        </div>
+    </div>
+</div>
+
+<!-- вспомогательные параметры для перерасчета -->
+<form method="POST" th:action="@{/update/{id}(id=${material.getId()})}"  >
+
+    <!-- Материал болт -->
+    <input type="hidden" th:value = "${material.getMaterials()}" id="materials_hidden" name ="materials_hidden"/>
+
+    <!-- предел текучести болт -->
+    <input type="hidden" th:value ="${material.getLimitStrength()}" id="limit_strength_hidden" name ="limit_strength_hidden"/>
+
+
+
+    <!-- класс прочности болт -->
+    <input type="hidden" th:value ="${material.getStrengthClass()}" id="strengthClass_hidden" name ="strengthClass_hidden"/>
+
+
+    <!-- материал гака -->
+    <input type="hidden" th:value ="${material.getMaterialScrew()}" id="materialScrew_hidden" name ="materialScrew_hidden"/>
+    <!-- предел текучести гайка -->
+
+
+    <input type="hidden" th:value ="${material.getLimitScrew()}" id="limitScrew_hidden" name ="limitScrew_hidden"/>
+
+    <!-- класс прочности гайка -->
+    <input type="hidden" th:value ="${material.getClassScrew()}" id="classScrew_hidden" name ="classScrew_hidden"/>
+
+    <!-- моменты затяжки -->
+    <div th:each = "moment: ${moments}" >
+
+        <input type="hidden" th:id="${moment.getThread().getThread()} + '_hidden'"
+               th:name="${moment.getThread().getThread()} + '_hidden'" th:value="${moment.getMomentsNm()}" />
+    </div>
+
+    <!-- коэфф. длины резьбы -->
+    <input type="hidden" th:value ="${material.getKDepth()}" id="kDepth_hidden" name ="kDepth_hidden"/>
+
+    <!-- комментарии -->
+    <input type="hidden" th:value ="${material.getComments()}" id="comments_hidden" name ="comments_hidden"/>
+
+    <!-- трение резьба -->
+    <input type="hidden" th:value ="${material.getCoeffFricBoltHead()}"
+           id="coeffFricBoltHead_hidden" name ="coeffFricBoltHead_hidden"/>
+
+    <!-- трение головка болта -->
+    <input type="hidden" th:value ="${material.getCoeffFricThread()}"
+           id="сoeffFricThread_hidden" name ="сoeffFricThread_hidden"/>
+
+    <!-- коэфф. нагрузки -->
+    <input type="hidden" th:value ="${material.getSafetyFactor()}"
+           id="safetyFactor_hidden" name ="safetyFactor_hidden"/>
+
+</form>
+
+
+<!--обработка нажатия копок-->
+<script>
+
+    // document.getElementById("submitSave").onclick = buttonSave;
+    document.getElementById("submitCalc").onclick = buttonCalc;
+    document.getElementById("submitApp").onclick = buttonApp;
+    // function buttonSave(){
+    //     const form_1 = document.getElementById("form_1");
+    //     form_1.setAttribute("th:action", "@{/update/{id}(id=${material.getId()})}");
+    //     form_1.setAttribute("method", "POST");
+    // }
+    function buttonCalc(){
+        const form_1 = document.getElementById("form_1");
+        form_1.setAttribute("action", "/create_recalculate");
+        form_1.setAttribute("method", "POST");
+    }
+    function buttonApp(){
+        const input_1 = document.getElementById("comment");
+        input_1.setAttribute("class", "btn btn-outline-warning");
+
+    }
+
+
+
+</script>
+<!--слушатель на изменение данных в форме -->
+<script>
+
+    const param_1 = document.getElementById("comment");
+    const param_2 = document.getElementById("materials");
+    const param_3 = document.getElementById("limit_strength");
+    const param_4 = document.getElementById("strengthClass");
+    const param_5 = document.getElementById("materialScrew");
+    const param_6 = document.getElementById("limitScrew");
+    const param_7 = document.getElementById("kDepth");
+    const param_8 = document.getElementById("coeffFricBoltHead");
+    const param_9 = document.getElementById("сoeffFricThread");
+    const param_10 = document.getElementById("safetyFactor");
+    const param_11 = document.getElementById("classScrew");
+
+
+    param_1.addEventListener("input", compareParam_1);
+    param_2.addEventListener("input", compareParam_2);
+    param_3.addEventListener("input", compareParam_3);
+    param_4.addEventListener("input", compareParam_4);
+    param_5.addEventListener("input", compareParam_5);
+    param_6.addEventListener("input", compareParam_6);
+    param_7.addEventListener("input", compareParam_7);
+    param_8.addEventListener("input", compareParam_8);
+    param_9.addEventListener("input", compareParam_9);
+    param_10.addEventListener("input", compareParam_10);
+    param_11.addEventListener("input", compareParam_11);
+
+
+    function compareParam_1() {param_1.setAttribute("class", "btn btn-warning");}
+    function compareParam_2() {param_2.setAttribute("class", "btn btn-warning");}
+    function compareParam_3() {param_3.setAttribute("class", "btn btn-warning");}
+    function compareParam_4() {param_4.setAttribute("class", "btn btn-warning");}
+    function compareParam_5() {param_5.setAttribute("class", "btn btn-warning");}
+    function compareParam_6() {param_6.setAttribute("class", "btn btn-warning");}
+    function compareParam_7() {param_7.setAttribute("class", "btn btn-warning");}
+    function compareParam_8() {param_8.setAttribute("class", "btn btn-warning");}
+    function compareParam_9() {param_9.setAttribute("class", "btn btn-warning");}
+    function compareParam_10() {param_10.setAttribute("class", "btn btn-warning");}
+    function compareParam_11() {param_11.setAttribute("class", "btn btn-warning");}
+
+</script>
+
+<script src="/js/bootstrap.bundle.min.js"></script>
+
+<footer>
+    <div class="conteiner">
+        <div class="row">
+            <div class="col-5">
+                <h4 class="text-center text-white"> EV</h4>
+            </div>
+        </div>
+    </div>
+</footer>
+</body>
+</html>
+
+

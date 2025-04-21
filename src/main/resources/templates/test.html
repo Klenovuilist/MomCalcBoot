@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="UTF-8" lang="ru">
+        <title>Moment</title>
+        <link  href="/css/bootstrap.min.css" rel="stylesheet" >
+        <link  href="/css/style.css" rel="stylesheet" >
+
+</head>
+<body>
+<header>
+    <div class="container">
+        <div class="row">
+            <div class="col-8">
+                <h2 class="text-center text-white">  Test </h2>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="container">
+    <div class="row">
+        <div class="col-6">
+            <P></P>
+            <h3>   <a th:text = "'Admin user = ' + ${mapLoad[Admin_user]}"  > </a>   </h3>
+            <P></P>
+            <h3>   <a th:text = "'bolt_entity = ' + ${mapLoad[bolt_entity]}"  > </a>   </h3>
+            <P></P>
+            <h3>   <a th:text = "'sqrew_entity = ' + ${mapLoad[sqrew_entity]}"  > </a>   </h3>
+            <P></P>
+            <h3>   <a th:text = "'materals_db = ' + ${mapLoad[materals_db]}"  > </a>   </h3>
+            <P></P>
+            <h3>   <a th:text = "'thread_db = ' + ${mapLoad[thread_db]}"  > </a>   </h3>
+            <h3>Test page</h3>
+            <p></p>
+            <form action = "/test_data" method = "post">
+                <input  class="btn btn-outline-dark" placeholder="SQL" id="sql" type="text" name="sql"  size="90" />
+                <p></p>
+                <h6>   <a th:text = "'request = ' + ${sql1}"  > </a>   </h6>
+                <div class="d-grid gap-2 d-md-block">
+                    <p></p>
+                    <button class="btn btn-dark" id="submit3" type="submit"> sql request </button>
+                </div>
+                <p></p>
+            </form>
+
+
+            <table class="table table-bordered">
+                <thead>
+                <tr class="table-warning table align-middle">
+
+                    <th>
+                        <h6> Болт</h6>
+                    </th>
+                    <th>
+                        <h6> Предел текучести, МПа</h6>
+                    </th>
+                    <th>
+                        <h6> Класс по ГОСТ 1759.4</h6>
+                    </th>
+                    <th>
+                        <h6> Примечание</h6>
+                    </th>
+                    <th>
+                        <h6> Дата</h6>
+
+                    </th>
+                    <th></th>
+
+                </tr>
+                </thead>
+                <tbody>
+                <div th:each = "bolt: ${allBolts}" >
+                    <tr class="table-success table align-middle">
+                        <!--                            name limit comment dataCreate classBolt-->
+                        <th>
+                            <input class="btn btn-outline-dark" id="bolt_name" type="text"
+                                   th:value="${bolt.getName()}" th:name="'name' + ${bolt.getId()}" size="10" />
+                        </th>
+                        <th>
+                            <input class="btn btn-outline-dark" id="bolt_limit" type="text"
+                                   th:name="'limit'+ ${bolt.getId()}" th:value="${bolt.getLimit()}"  size="4" />
+                        </th>
+                        <th>
+                            <input class="btn btn-outline-dark" id="bolt_classBolt" type="text"
+                                   th:name="'classBolt' + ${bolt.getId()}" th:value="${bolt.getClassBolt()}"  size="3" />
+                        </th>
+
+                        <th>
+                            <input class="btn btn-outline-dark" id="bolt.comment" type="text"
+                                   th:name="'comments' + ${bolt.getId()}" th:value="${bolt.getComment()}"  size="10" />
+                        </th>
+                        <th>
+                            <h6> <a th:text="${bolt.getDataCreate()}">  </a> </h6>
+                        </th>
+                        <th>
+                            <a th:href = "@{/all_bolt/{id}(id = ${bolt.getId()})}" >   <h8>удалить</h8>  </a>
+                        </th>
+                    </tr>
+                </div>
+                <!--                        Строка создания нового болта-->
+                <tr class="table-success table align-middle">
+                    <th>
+                        <input  class="btn btn-outline-dark" placeholder="новый материал" id="bolt_name_new" type="text" name="bolt_name_new"  size="10" />
+                    </th>
+                    <th>
+                        <input class="btn btn-outline-dark" id="bolt_limit_new" type="text"  name="bolt_limit_new" size="4" placeholder="450" />
+                    </th>
+                    <th>
+                        <input class="btn btn-outline-dark"  type="text" name="bolt_classBolt_new" placeholder="5.5" size="3" />
+                    </th>
+                    <th>
+                        <input id="bolt.comment_new" class="btn btn-outline-dark" type="text" name="bolt.comment_new" placeholder="comm" size="10" />
+                    </th>
+                    <th>
+
+                    </th>
+                    <th>
+
+                    </th>
+                </tr>
+
+                </tbody>
+            </table>
+            <p></p>
+
+
+            <table class="table table-bordered">
+                <thead>
+                <tr class="table-warning table align-middle">
+
+                    <th>
+                        <h6> Гайка</h6>
+                    </th>
+                    <th>
+                        <h6> Предел текучести, МПа</h6>
+                    </th>
+                    <th>
+                        <h6> Kh </h6>
+                    </th>
+                    <th>
+                        <h6> Класс по ГОСТ 1759.4</h6>
+                    </th>
+                    <th>
+                        <h6> Примечание</h6>
+                    </th>
+                    <th>
+                        <h6> Дата</h6>
+
+                    </th>
+                    <th></th>
+
+                </tr>
+                </thead>
+                <tbody>
+                <div th:each = "sqrew: ${allSqrews}" >
+                    <tr class="table-success table align-middle">
+                        <!--                            name limit comment dataCreate classBolt-->
+                        <th>
+                            <input class="btn btn-outline-dark" id="sqrew_name" type="text"
+                                   th:value="${sqrew.getName()}" th:name="'name' + ${sqrew.getId()}" size="10" />
+                        </th>
+                        <th>
+                            <input class="btn btn-outline-dark" id="sqrew_limit" type="text"
+                                   th:name="'limit'+ ${sqrew.getId()}" th:value="${sqrew.getLimit()}"  size="4" />
+                        </th>
+                        <th>
+                            <input class="btn btn-outline-dark" id="depth" type="text"
+                                   th:name="'depthSqrew' + ${sqrew.getId()}" th:value="${sqrew.getDepth()}"  size="3" />
+                        </th>
+                        <th>
+                            <input class="btn btn-outline-dark" id="sqrew_classBolt" type="text"
+                                   th:name="'classSqrew' + ${sqrew.getId()}" th:value="${sqrew.getClassSqrew()}"  size="3" />
+                        </th>
+
+                        <th>
+                            <input class="btn btn-outline-dark" id="sqrew.comment" type="text"
+                                   th:name="'comments' + ${sqrew.getId()}" th:value="${sqrew.getComment()}"  size="10" />
+                        </th>
+                        <th>
+                            <h6> <a th:text="${sqrew.getDataCreate()}">  </a> </h6>
+                        </th>
+                        <th>
+                            <a th:href = "@{/all_sqrew/{id}(id = ${sqrew.getId()})}" >   <h8>удалить</h8>  </a>
+                        </th>
+                    </tr>
+                </div>
+                <!--                        Строка создания нового болта-->
+                <tr class="table-success table align-middle">
+                    <th>
+                        <input  class="btn btn-outline-dark" placeholder="новый материал" id="sqrew_name_new" type="text" name="sqrew_name_new"  size="10" />
+                    </th>
+                    <th>
+                        <input class="btn btn-outline-dark" id="sqrew_limit_new" type="text"  name="sqrew_limit_new" size="4" placeholder="450" />
+                    </th>
+                    <th>
+                        <input class="btn btn-outline-dark" id="sqrew_depth_new" type="text"  name="sqrew_depth_new" size="4" placeholder="450" />
+                    </th>
+                    <th>
+                        <input class="btn btn-outline-dark"  type="text" name="sqrew_classBolt_new" placeholder="5.5" size="3" />
+                    </th>
+                    <th>
+                        <input id="sqrew.comment_new" class="btn btn-outline-dark" type="text" name="sqrew.comment_new" placeholder="comm" size="10" />
+                    </th>
+                    <th>
+
+                    </th>
+                    <th>
+
+                    </th>
+                </tr>
+
+                </tbody>
+            </table>
+            <p></p>
+
+
+            <!--Таблица users-->
+            <table class="table table-success table-striped">
+                <thead>
+                <tr>
+                    <th> Name </th>
+                    <th> Role </th>
+                    <th> Password </th>
+                    <th> Data </th>
+                    <th> ID </th>
+                    <th>  </th>
+
+                </tr>
+
+                </thead>
+
+                <div th:each = "userEntity: ${allUsers}" >
+                    <tbody>
+                    <tr>
+                        <div
+                                th:each = "parametr: ${userEntity.getUserInfo}" >
+                            <th>
+                                <a th:text = "${parametr}" >   </a>
+                            </th>
+
+                        </div>
+                        <th>
+                            <a th:href = " @{/user/{id}(id = ${userEntity.getId()})} " >
+                                <p th:text="more"> </p> </a>
+                        </th>
+                    </tr>
+                    </tbody>
+                </div>
+            </table>
+            <p></p>
+
+<!--Таблица резьбы-->
+            <table class="table table-success table-striped">
+                <thead>
+                <tr>
+                    <th> ID </th>
+                    <th> Резьба </th>
+                    <th> диаметр </th>
+                    <th> Шаг </th>
+                    <th> D гол. </th>
+                    <th> D отв. </th>
+                    <th> D сред. </th>
+
+                </tr>
+
+                </thead>
+
+                <div th:each = "thread: ${allThreads}" >
+                    <tbody>
+                    <tr>
+                        <div
+                                th:each = "parametr: ${thread.parametrThread}" >
+                            <th>
+                                <a th:text = "${parametr}" >   </a>
+                            </th>
+
+                        </div>
+                    </tr>
+                    </tbody>
+                </div>
+            </table>
+            <p><
+
+
+            <form action = "/test_data/load_data" method = "get">
+                <div class="d-grid gap-2 d-md-block">
+                    <button class="btn btn-dark" id="submit" type="submit"> load_data </button>
+                </div>
+            </form>
+            <p></p>
+            <form action = "/test_data/get_data" method = "get">
+                <div class="d-grid gap-2 d-md-block">
+                    <button class="btn btn-dark" id="submit2" type="submit"> get_data </button>
+                </div>
+            </form>
+
+            <p></p>
+        </div>
+
+    </div>
+</div>
+
+
+<p></p>
+<h3>Test page</h3>
+<p></p>
+
+
+
+</body>
+</html>

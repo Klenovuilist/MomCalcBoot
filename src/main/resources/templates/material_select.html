@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" lang="ru">
+    <title>Moment</title>
+    <link  href="/css/bootstrap.min.css" rel="stylesheet" >
+    <link  href="/css/style.css" rel="stylesheet" >
+
+
+</head>
+<body>
+<header>
+    <div class="container">
+        <div class="row">
+            <div class="col-8">
+                <h1 class="text-center text-white">  Material </h1>
+            </div>
+        </div>
+    </div>
+</header>
+<p></p>
+<div class="container">
+    <div class="row">
+        <div class="col-5">
+           <P></P>
+
+            <form action = "/" method = "get">
+
+                <table class="table table-bordered">
+                    <thead>
+                    <tr class="table-warning table align-middle">
+                            <th></th>
+                            <th>
+                               <h6> Материал(болт/гайка)</h6>
+                            </th>
+                            <th>
+                                <h6> Предел текучести(болт/гайка) МПа</h6>
+                            </th>
+                            <th>
+                                <h6> Класс(болт/гайка)</h6>
+                            </th>
+                            <th>
+                                <h6> Дата</h6>
+                            </th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <div th:each = "material: ${materialsAdmin}" >
+                          <tr class="table-success table align-middle">
+                            <th>
+                                <input type="checkbox" class="form-check-input" th:name="${material.getId()}" th:value="${material.getId()}"/>
+                            </th>
+
+                            <th>
+                                <a th:href = " @{/moment_page_1/{id}(id = ${material.getId()})} " >
+                                    <p th:text=" ${material.getMaterials()} + ' / ' + ${material.getMaterialScrew()}"> </p> </a>
+                            </th>
+
+
+                            <th>
+                                <a th:text =  "${material.getLimitStrength()} + ' / ' +  ${material.getLimitScrew()} + ','" > </a> MPa
+                            </th>
+                            <th>
+                                <a th:text =  "${material.getStrengthClass()} + ' / ' + ${material.getClassScrew()}" > </a>
+                            </th>
+                            <th>
+                                <a th:text =  "${material.getDataCreate}" > </a>
+                            </th>
+
+                    </tr>
+                </div>
+                    </tbody>
+                </table>
+
+                <p></p>
+                Materials   <a th:text = "${userName}" > </a>
+                <p></p>
+
+                <table class="table table-bordered">
+                    <thead>
+                    <tr class="table-warning table align-middle">
+                        <th></th>
+                        <th>
+                            <h6> Материал</h6>
+                        </th>
+                        <th>
+                            <h6> Предел текучести МПа</h6>
+                        </th>
+                        <th>
+                            <h6> Класс</h6>
+                        </th>
+                        <th>
+                            <h6> Дата</h6>
+                        </th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <div th:each = "material: ${materialsUser}" >
+                        <tr class="table-success table align-middle">
+                            <th>
+                                <input type="checkbox" class="form-check-input" th:name="${material.getId()}" th:value="${material.getId()}"/>
+                            </th>
+
+                            <th>
+                                <a th:href = " @{/moment_page_1/{id}(id = ${material.getId()})} " >
+                                    <p th:text=" ${material.getMaterials()} + ' / ' + ${material.getMaterialScrew()}"> </p> </a>
+                            </th>
+
+
+                            <th>
+                                <a th:text =  "${material.getLimitStrength()} + ' / ' +  ${material.getLimitScrew()} + ','" > </a> MPa
+                            </th>
+                            <th>
+                                <a th:text =  "${material.getStrengthClass()} + ' / ' + ${material.getClassScrew()}" > </a>
+                            </th>
+                            <th>
+                                <a th:text =  "${material.getDataCreate}" > </a>
+                            </th>
+
+                        </tr>
+                    </div>
+                    </tbody>
+                </table>
+                <p></p>
+                    <button type="submit" class="btn btn-primary">Применить</button>
+
+            </form>
+            <p></p>
+            <form action = "/materials_create" method = "get">
+
+                <div class="d-grid gap-2 d-md-block">
+                    <button class="btn btn-primary" id="submit2" type="submit"> Создать </button>
+                    <label for="submit2">новый материал</label>
+                </div>
+            </form>
+            <p></p>
+            <p></p>
+
+</div>
+<script src="/js/bootstrap.bundle.min.js"></script>
+
+
+</body>
+</html>
+
+
+
