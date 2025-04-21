@@ -19,6 +19,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.ev.momcalcboot.service.internal.ParserNumber.toDouble;
+import static com.ev.momcalcboot.service.internal.ParserNumber.toInt;
+
 
 @Service
 @AllArgsConstructor
@@ -126,7 +129,7 @@ public class BoltService {
 
         if (Strings.isNotBlank(classBolt)) {
 
-            bolt.setClassBolt(Double.parseDouble(classBolt));
+            bolt.setClassBolt(toDouble(classBolt));
         } else {
             bolt.setClassBolt(0d);
         }
@@ -184,7 +187,7 @@ public class BoltService {
             String classBolt = request.getParameter("classBolt");
 
             if (Strings.isNotBlank(classBolt)) {
-                bolt.setClassBolt(Double.parseDouble(classBolt));
+                bolt.setClassBolt(toDouble(classBolt));
             }
 
             /**
@@ -290,11 +293,11 @@ public class BoltService {
                      if (Strings.isNotBlank(request.getParameter("classBolt" + bolt.getId()))){
 
                          if (bolt.getClassBolt() == null) {
-                             bolt.setClassBolt(Double.parseDouble(request.getParameter("classBolt" + bolt.getId())));
+                             bolt.setClassBolt(toDouble(request.getParameter("classBolt" + bolt.getId())));
                              saveKey = true;
                          }
-                         else if (Double.parseDouble(request.getParameter("classBolt" + bolt.getId())) != bolt.getClassBolt()) {
-                             bolt.setClassBolt(Double.parseDouble(request.getParameter("classBolt" + bolt.getId())));
+                         else if (toDouble(request.getParameter("classBolt" + bolt.getId())) != bolt.getClassBolt()) {
+                             bolt.setClassBolt(toDouble(request.getParameter("classBolt" + bolt.getId())));
                              saveKey = true;
                          }
                      }
@@ -343,17 +346,17 @@ public class BoltService {
 
             if (Strings.isNotBlank(request.getParameter("bolt_limit_new"))) {
 
-                limit = Integer.parseInt(request.getParameter("bolt_limit_new"));
+                limit = toInt(request.getParameter("bolt_limit_new"));
             }
 
             if (Strings.isNotBlank(request.getParameter("bolt_classBolt_new"))) {
 
-                classBolt = Double.parseDouble(request.getParameter("bolt_classBolt_new"));
+                classBolt = toDouble(request.getParameter("bolt_classBolt_new"));
             }
 
             if (Strings.isNotBlank(request.getParameter("bolt_limit_new")) && Strings.isBlank(request.getParameter("bolt_classBolt_new"))){
 
-                classBolt = calcClassBolt(Integer.parseInt(request.getParameter("bolt_limit_new")));
+                classBolt = calcClassBolt(toInt(request.getParameter("bolt_limit_new")));
             }
 
             if (Strings.isNotBlank(request.getParameter("bolt.comment_new"))){

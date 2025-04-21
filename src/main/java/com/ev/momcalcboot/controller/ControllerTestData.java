@@ -25,7 +25,7 @@ import java.util.*;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/")
+//@RequestMapping("/")
 public class ControllerTestData {
 
     private final TestDatalLoad testDatalLoad;

@@ -60,7 +60,7 @@ public class BoltDaoRepository {
       boltRepository.save(bolt);
         }
 
-@Transactional()
+@Transactional(rollbackFor = RuntimeException.class)
         public boolean deleteBolt(int boltId){
 
         boolean result = false;

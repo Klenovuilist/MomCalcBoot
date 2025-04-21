@@ -32,6 +32,6 @@ public class ControllerMaterialDelete {
 
         materialsDao.materialRemove(materalForDelete);
 
-        return "redirect:/moment_page_1";
+        return "redirect:/";
     }
 }

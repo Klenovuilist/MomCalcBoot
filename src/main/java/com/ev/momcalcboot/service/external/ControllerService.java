@@ -5,6 +5,10 @@ import com.ev.momcalcboot.Entity.MaterialsEntity;
 import com.ev.momcalcboot.Entity.SqrewEntity;
 import com.ev.momcalcboot.Entity.ThreadEntity;
 import com.ev.momcalcboot.exceptions.FormatException;
+import com.ev.momcalcboot.service.internal.ParserNumber;
+
+
+
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Service;
@@ -12,6 +16,11 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+
+import static com.ev.momcalcboot.service.internal.ParserNumber.toDouble;
+import static com.ev.momcalcboot.service.internal.ParserNumber.toInt;
+
+
 
 @Service
 public class ControllerService {
@@ -58,9 +67,9 @@ public class ControllerService {
 // прочность болта
         if (Strings.isNotBlank(request.getParameter("limateStrengthBolt_Mpa")) && !newThread) {
 
-            dataForm.put("limateStrengthBolt_Mpa", request.getParameter("limateStrengthBolt_Mpa"));
-            try {
-                Integer.parseInt(request.getParameter("limateStrengthBolt_Mpa"));
+            try {;
+                dataForm.put("limateStrengthBolt_Mpa", String.valueOf(toInt(request.getParameter("limateStrengthBolt_Mpa"))));
+
             }
             catch (Exception e){
                 throw new FormatException("не верный формат: \"Предел текучести, болт\"");
@@ -72,10 +81,8 @@ public class ControllerService {
 
 //      Прочность гайки
         if (Strings.isNotBlank(request.getParameter("limateStrengthScrew_Mpa")) && !newThread) {
-
-            dataForm.put("limateStrengthScrew_Mpa", request.getParameter("limateStrengthScrew_Mpa"));
             try {
-                Integer.parseInt(request.getParameter("limateStrengthScrew_Mpa"));
+                dataForm.put("limateStrengthScrew_Mpa", String.valueOf(toInt(request.getParameter("limateStrengthScrew_Mpa"))));
             }
             catch (Exception e){
                 throw new FormatException("не верный формат: \"Предел текучести, гайка\"");
@@ -88,10 +95,9 @@ public class ControllerService {
 
 // диаметр
         if (Strings.isNotBlank(request.getParameter("diametrThread_mm")) && !newThread) {
-
-            dataForm.put("diametrThread_mm", request.getParameter("diametrThread_mm"));
             try {
-                Double.parseDouble(request.getParameter("diametrThread_mm"));
+                dataForm.put("diametrThread_mm", String.valueOf(toDouble(request.getParameter("diametrThread_mm"))));
+//                Double.parseDouble(request.getParameter("diametrThread_mm"));
             }
             catch (Exception e){
                 throw new FormatException("не верный формат: \"Диаметр гайки\"");
@@ -132,9 +138,10 @@ public class ControllerService {
 //      средний Д резьбы
         if (Strings.isNotBlank(request.getParameter("middleDiamThread_mm")) && !newThread) {
 
-            dataForm.put("middleDiamThread_mm", request.getParameter("middleDiamThread_mm"));
+
             try {
-                Double.parseDouble(request.getParameter("middleDiamThread_mm"));
+                dataForm.put("middleDiamThread_mm", String.valueOf(toDouble(request.getParameter("middleDiamThread_mm"))));
+//                Double.parseDouble(request.getParameter("middleDiamThread_mm"));
             }
             catch (Exception e){
                 throw new FormatException("не верный формат: \"Средний диаметр резьбы\"");
@@ -147,9 +154,10 @@ public class ControllerService {
 //      глубина резьбы
         if (Strings.isNotBlank(request.getParameter("k_threadDepth")) && !newThread && !newSqrew) {
 
-            dataForm.put("k_threadDepth", request.getParameter("k_threadDepth"));
+
             try {
-                Double.parseDouble(request.getParameter("k_threadDepth"));
+                dataForm.put("k_threadDepth", String.valueOf(toDouble(request.getParameter("k_threadDepth"))));
+//                Double.parseDouble(request.getParameter("k_threadDepth"));
             }
             catch (Exception e){
                 throw new FormatException("не верный формат \"Длина резьбы\"");
@@ -161,9 +169,9 @@ public class ControllerService {
 
 // коэфф безопасности
         if (Strings.isNotBlank(request.getParameter("safetyFactor")) && !newThread) {
-            dataForm.put("safetyFactor", request.getParameter("safetyFactor"));
             try {
-                Double.parseDouble(request.getParameter("safetyFactor"));
+                dataForm.put("safetyFactor", String.valueOf(toDouble(request.getParameter("safetyFactor"))));
+//                Double.parseDouble(request.getParameter("safetyFactor"));
             }
             catch (Exception e){
                 throw new FormatException("не верный формат \"Коэфф. безопасности\"");
@@ -175,9 +183,10 @@ public class ControllerService {
 
 //      Шаг резьбы
         if (Strings.isNotBlank(request.getParameter("stepThread_mm")) && !newThread) {
-            dataForm.put("stepThread_mm", request.getParameter("stepThread_mm"));
+
             try {
-                Double.parseDouble(request.getParameter("stepThread_mm"));
+                dataForm.put("stepThread_mm", String.valueOf(toDouble(request.getParameter("stepThread_mm"))));
+//                Double.parseDouble(request.getParameter("stepThread_mm"));
             }
             catch (Exception e){
                 throw new FormatException("не верный формат \"Шаг резьбы\"");
@@ -189,9 +198,9 @@ public class ControllerService {
 
 
         if (Strings.isNotBlank(request.getParameter("coefficientOfFrictionThread")) && !newThread) {
-            dataForm.put("coefficientOfFrictionThread", request.getParameter("coefficientOfFrictionThread"));
             try {
-                Double.parseDouble(request.getParameter("coefficientOfFrictionThread"));
+                dataForm.put("coefficientOfFrictionThread",String.valueOf(toDouble(request.getParameter("coefficientOfFrictionThread"))));
+//                Double.parseDouble(request.getParameter("coefficientOfFrictionThread"));
             }
             catch (Exception e){
                 throw new FormatException("не верный формат \"Коэфф. трения резьбы\"");
@@ -203,9 +212,10 @@ public class ControllerService {
 
 // коэфф. трения
         if (Strings.isNotBlank(request.getParameter("coefficientOfFrictionBoltHead")) && !newThread) {
-            dataForm.put("coefficientOfFrictionBoltHead", request.getParameter("coefficientOfFrictionBoltHead"));
+
             try {
-                Double.parseDouble(request.getParameter("coefficientOfFrictionBoltHead"));
+                dataForm.put("coefficientOfFrictionBoltHead",String.valueOf(toDouble(request.getParameter("coefficientOfFrictionBoltHead"))));
+//                Double.parseDouble(request.getParameter("coefficientOfFrictionBoltHead"));
             }
             catch (Exception e){
                 throw new FormatException("не верный формат \"Коэфф. трения головки болта\"");
@@ -217,9 +227,10 @@ public class ControllerService {
 
 // Д головки болта.
         if (Strings.isNotBlank(request.getParameter("diametrHead_mm")) && !newThread) {
-            dataForm.put("diametrHead_mm", request.getParameter("diametrHead_mm"));
+
             try {
-                Double.parseDouble(request.getParameter("diametrHead_mm"));
+                dataForm.put("diametrHead_mm", String.valueOf(toDouble(request.getParameter("diametrHead_mm"))));
+//                Double.parseDouble(request.getParameter("diametrHead_mm"));
             }
             catch (Exception e){
                 throw new FormatException("не верный формат \"диаметр головки болта.\"");
@@ -231,9 +242,10 @@ public class ControllerService {
 
 //       Д отв.
         if (Strings.isNotBlank(request.getParameter("diametrHole_mm")) && !newThread) {
-            dataForm.put("diametrHole_mm", request.getParameter("diametrHole_mm"));
+
             try {
-                Double.parseDouble(request.getParameter("diametrHole_mm"));
+                dataForm.put("diametrHole_mm", String.valueOf(toDouble(request.getParameter("diametrHole_mm"))));
+//                Double.parseDouble(request.getParameter("diametrHole_mm"));
             }
             catch (Exception e){
                 throw new FormatException("не верный формат \"диаметр отв.\"");
@@ -348,7 +360,7 @@ public class ControllerService {
 
 
     /**
-    * Установка атрибутов Class для формы ввода при сравнении с дефолтными значениями
+    * Установка атрибутов Class(отображение на фронте) для формы ввода при сравнении с дефолтными значениями
      */
     public Map<String, String> setClassAtributeForForm(Map<String, String> mapDefoult, Map<String, String> mapChange){
 
@@ -380,11 +392,12 @@ public class ControllerService {
     }
 
 
-
+    /**
+     * Получение параметров из формы (для старых контроллеров по созданию материала)
+     * @param request
+     * @return
+     */
     public Map<String, String> getParametrFromForm(HttpServletRequest request){
-
-
-
 
 
         Map<String, String> dataForm = new HashMap<>();

@@ -1,0 +1,7 @@
+﻿FROM eclipse-temurin:17.0.8_7-jre
+WORKDIR /tmp
+#COPY target/nameAddress-0.1.0-jar-with-dependencies.jar /tmp/app.jar
+COPY ./moment-calc-0.1.0.jar /tmp/moment-calc-0.1.0.jar
+EXPOSE 8077
+CMD ["java", "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5004" ,"-jar", "moment-calc-0.1.0.jar"]
+

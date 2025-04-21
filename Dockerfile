@@ -1,7 +1,7 @@
 ﻿FROM eclipse-temurin:17.0.8_7-jre
-WORKDIR /tmp
+WORKDIR /app
 #COPY target/nameAddress-0.1.0-jar-with-dependencies.jar /tmp/app.jar
-COPY target/moment-calc-0.1.0.jar /tmp/app.jar
+COPY target/moment-calc-0.1.0.jar /app/app.jar
 EXPOSE 8077
 CMD ["java", "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5004" ,"-jar", "app.jar"]
 

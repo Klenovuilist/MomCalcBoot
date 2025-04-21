@@ -62,4 +62,10 @@ databaseChangeLog:
       file: db/changelog/changeset/12-alter-data column-cqrew.sql
 
 
+  - include:
+      id: creat new column classBolt
+      author: EV
+      file: db/changelog/changeset/13-id column-user.sql
+
+
 

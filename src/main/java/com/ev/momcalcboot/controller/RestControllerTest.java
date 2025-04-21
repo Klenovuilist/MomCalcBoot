@@ -67,9 +67,10 @@ public class RestControllerTest {
     @GetMapping("/test")
     public UserEntity testQuery(){
 
-        return testRepository.getUsersByIdTest(2);
+        return testRepository.getUsersByIdTest(1);
 
     }
+
 
     }
 

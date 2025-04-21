@@ -120,7 +120,7 @@ public class MaterialCreateController {
                     momentsDao.saveAll(moment);
                 }
 
-            return "redirect:/moment_page_1";
+            return "redirect:/";
         }
         return "redirect:/user_registration";
     }

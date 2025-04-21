@@ -67,15 +67,25 @@ public class TestDatalLoad {
             }
 
             try {
-                jdbcTemplate.update("insert into thread_db (thread, step_thread, d_midlethread, d_bolt, d_hole, d_head)" +
-                        " values ('M3',0.5,2.675,3,3.1,5)," +
-                        " ('M10',1.5,9.026,10,10.3,16)," +
-                        " ('M2.5',0.45,2.273,2.5,2.6,4.35)," +
-                        " ('M6',1,5.35,6,6.2,10)," +
-                        " ('M7',1,6.35,7,7.2,11)," +
-                        " ('M5',0.8,4.48,5,5.2,8)," +
+                jdbcTemplate.update("insert into thread_db (thread, step_thread, d_midlethread, d_bolt, d_hole, d_head) values " +
+                        "('M3',0.5,2.675,3,3.1,5)," +
+                        "('M10',1.5,9.026,10,10.3,16)," +
+                        "('M2.5',0.45,2.273,2.5,2.6,4.35)," +
+                        "('M6',1,5.35,6,6.2,10)," +
+                        "('M7',1,6.35,7,7.2,11)," +
+                        "('M5',0.8,4.48,5,5.2,8)," +
                         "('M4',0.6,3.545,4,4.2,7)," +
-                        "('M8',1.25,7.188,8,8.2,13)");
+                         "('M8',1.25,7.188,8,8.2,13);" +
+                        "INSERT INTO public.thread_db (thread, d_bolt, d_hole, d_head, step_thread, d_midlethread) values" +
+                        "('M1.6', 1.6, 1.65, 3, '0.35', 1.373)," +
+                        " ('M2', 2, 2.1, 3.8, '0.4', 1.74)," +
+                        "('M12', 12, 12.5, 18, '1.75', 10.863)," +
+                        "('M14', 14, 14.6, 21, '2', 12.701)," +
+                        "('M16', 16, 16.8, 24, '2', 14.701)," +
+                        "('M18', 18, 18.8, 27, '2.5', 16.376)," +
+                        "('M20', 20, 21, 30, '2.5', 18.376) ");
+
+
                 mapMessage.put("thread_db", true);
 
             } catch (RuntimeException e) {

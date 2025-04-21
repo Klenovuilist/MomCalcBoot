@@ -11,32 +11,31 @@ import com.ev.momcalcboot.service.internal.*;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.text.DecimalFormat;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.nonNull;
+import static com.ev.momcalcboot.service.internal.ParserNumber.toDouble;
+import static com.ev.momcalcboot.service.internal.ParserNumber.toInt;
+
 
 @Controller
-@AllArgsConstructor
-@RequestMapping
+//@AllArgsConstructor
+@RequiredArgsConstructor
+//@RequestMapping("/")
 public class MomentController {
+
 
     private final MaterialsDao materialsDao;
 
@@ -496,7 +495,7 @@ public class MomentController {
      * Загрузка главной страницы (new)
      */
     @SoutAOP
-    @GetMapping("/moment_page_1") //moment_page_1
+    @GetMapping("/") //moment_page_1
     public String moment_page_1(@RequestParam(value = "threadId", required = false) Integer threadId
             , Model model, HttpServletRequest request, HttpServletResponse response) throws InterruptedException {  // модель для отображения во view
         System.out.println("@GetMapping(/moment_page_1");
@@ -525,8 +524,8 @@ public class MomentController {
         }
 
         /**
-         * Получение списка болтов от юзера и админа
-         */
+         * Получение списка болтов юзера и админа из БД*/
+
         List<BoltEntity> usersBolt = boltService.boltsByUserId(userId);
 
         List<BoltEntity> adminBolt = boltService.boltsAdmin();
@@ -537,7 +536,7 @@ public class MomentController {
 
 
         /**
-         * Получение списка гаек от юзера и админа
+         * Получение списка гаек от юзера и админа из БД
          */
         List<SqrewEntity> userSqrews = sqrewService.getSqrewsByUserId(userId);
 
@@ -556,11 +555,10 @@ public class MomentController {
         List<ThreadEntity> threadEntityNoSorted = threadDao.getThread();
 
         /**
-         * to do
-         * сортировка листа резьб по возрастанию - переделать
+         * сортировка листа резьб по возрастанию
          */
         List<ThreadEntity> threadEntitySorted = threadEntityNoSorted.stream()
-                .sorted((thread1, thread2) -> thread1.getThread().compareTo(thread2.getThread()))
+                .sorted((thr1, thr2) -> thr1.compareTo(thr2))
                 .collect(Collectors.toList());
 
         model.addAttribute("threads", threadEntitySorted);
@@ -641,7 +639,7 @@ public class MomentController {
 
 
         /**
-         * Резьба по парметрам из формы пользователя
+         * Резьба по парметрам из формы пользователя - ОСНОВНОЙ для вычислений от threadCurrent
          */
         ThreadEntity threadByParametr = threadService.getThreadByRequestParam(dataForForm, threadCurrent);
 
@@ -651,23 +649,22 @@ public class MomentController {
          */
         model.addAttribute("bolt", boltService.getBoltByRequestBoltIdOrParam(allBolt, request));
         model.addAttribute("sqrew", sqrewService.getSqrewByRequestSqrewIdOrParam(allSqrews, request));
-        /**
 
+
+        /**
          * вычисление момента, силы, напряжений по соответствию с id гайки, материала, текущей резьбой, параметрами
          * материала из формы
+         * Для главной страницы
          */
+        List<Integer> powerList = momentService.powerMaxForBoltSqrewList( // убрать из метода materialService.getMaterialByRequestParam
+                boltService.getBoltByRequestBoltIdOrParam(allBolt, request),
+                sqrewService.getSqrewByRequestSqrewIdOrParam(allSqrews, request),
+                threadByParametr,
+                dataForForm);
 
-
-           int powerMaxBoltSqrew_N =  momentService.powerMaxForBoltSqrew( // убрать из метода materialService.getMaterialByRequestParam
-                    boltService.getBoltByRequestBoltIdOrParam(allBolt, request),
-                    sqrewService.getSqrewByRequestSqrewIdOrParam(allSqrews, request),
-                    threadByParametr,
-                    dataForForm);
-
+        int powerMaxBoltSqrew_N =  powerList.get(0);
 
         int powerMaxBoltSqrew_kgs = momentService.powerMaxForMaterial_kgs(powerMaxBoltSqrew_N);
-
-
 
         double momentForBoltSqrew_Nm = momentService.momentsKallermanForBoltSqrew_N(boltService.getBoltByRequestBoltIdOrParam(allBolt, request),
                     sqrewService.getSqrewByRequestSqrewIdOrParam(allSqrews, request),
@@ -675,47 +672,54 @@ public class MomentController {
                     materialService.getMaterialByRequestParam(dataForForm),
                     dataForForm);
 
-
-
-
-//
-//        double momentForBoltSqrew_Nm = momentService.momentKellerman_NM(
-//                powerMaxBoltSqrew_N,
-//                Double.parseDouble(dataForForm.get("middleDiamThread_mm")),
-//                Double.parseDouble(dataForForm.get("stepThread_mm")),
-//                Double.parseDouble(dataForForm.get("coefficientOfFrictionThread")),
-//                Double.parseDouble(dataForForm.get("coefficientOfFrictionBoltHead")),
-//                Double.parseDouble(dataForForm.get("diametrHead_mm")),
-//                Double.parseDouble(dataForForm.get("diametrHole_mm")));
-
-
         int stregthInBoltRot_MPa = momentService.strengthInBoltRot_Mpa(
                 powerMaxBoltSqrew_N,
                 threadByParametr.getDBolt_mm());
 
-        int stregthInThread_MPa = momentService.strengthInThread_Mpa(
-                powerMaxBoltSqrew_N,
-                threadByParametr.getDBolt_mm(),
-                Double.parseDouble(dataForForm.get("middleDiamThread_mm")),
-                Double.parseDouble(dataForForm.get("k_threadDepth")));
 
-        model.addAttribute("momentForBoltSqrew_Nm", momentForBoltSqrew_Nm);
+//        int stregthInThread_MPa = momentService.strengthInThread_Mpa(
+//                powerMaxBoltSqrew_N,
+//                threadByParametr.getDBolt_mm(),
+//                Double.parseDouble(dataForForm.get("middleDiamThread_mm")),
+//                Double.parseDouble(dataForForm.get("k_threadDepth")));
+
+        model.addAttribute("momentForBoltSqrew_Nm", new DecimalFormat("#.#").format(momentForBoltSqrew_Nm));
         model.addAttribute("powerMaxBoltSqrew_kgs", powerMaxBoltSqrew_kgs);
         model.addAttribute("stregthInBoltRot_MPa", stregthInBoltRot_MPa);
-        model.addAttribute("stregthInThread_MPa", stregthInThread_MPa);
-
-        /**
-         *
-         */
+        model.addAttribute("listMaxPower", powerList);
+//        model.addAttribute("stregthInThread_MPa", stregthInThread_MPa);
 
 
 /**
- * Вычисление сил моментов и напряжения
+ * Распределение напряжени по виткам резбы
  */
+        List<String>strengthInTurnList = momentService.strengthInTurnList_Mpa(
+                powerMaxBoltSqrew_N,
+                threadByParametr,
+                toDouble(dataForForm.get("stepThread_mm"))
+                , toDouble(dataForForm.get("middleDiamThread_mm"))
+                , toDouble(dataForForm.get("k_threadDepth")));
+
+
+        model.addAttribute("strengthInTurn", strengthInTurnList);
 
         /**
-         * передача в модель вспомогательного параметра no_bolt для отображения чекбокс
+         * Напряжение на первом витке
          */
+        model.addAttribute("strengthInOneTurn", strengthInTurnList.get(0).substring(3));
+
+        //Количество рабочих витков
+
+        model.addAttribute("countWorkTurn", momentService.countWorkTurn(
+                threadByParametr.getDBolt_mm(),
+                toDouble(dataForForm.get("k_threadDepth")),
+                toDouble(dataForForm.get("stepThread_mm"))));
+
+        //Высота гайки
+        model.addAttribute("hSqrew",
+                new DecimalFormat("#,#")
+                        .format(momentService.hSqrew_mm(threadCurrent
+                        ,toDouble(dataForForm.get("k_threadDepth")))));
 
 
 /**
@@ -857,7 +861,7 @@ public class MomentController {
          * сортировка листа резьб по возрастанию
          */
         List<ThreadEntity> threadEntitySorted = threadEntityNoSorted.stream()
-                .sorted((thread1, thread2) -> thread1.getThread().compareTo(thread2.getThread()))
+                .sorted(ThreadEntity::compareTo)
                 .collect(Collectors.toList());
 
         model.addAttribute("threads", threadEntitySorted);
@@ -923,7 +927,7 @@ public class MomentController {
 
 
             /**
-             * установка значений  из формы
+             * установка значений из формы в dataForCalc для текущих расчетов
              */
 
             if (Strings.isNotBlank(request.getParameter("limateStrengthBolt_Mpa"))) {
@@ -992,7 +996,7 @@ public class MomentController {
                 model.addAttribute("no_bolt", 0);
             }
             /**
-             * Допустимые силы в резьбах и болте
+             * Допустимые силы в резьбах(среднее) и болте
              */
                    int powerMaxByThreadBolt_N = momentService.powerMaxByLimitInThread_N(
                     Integer.parseInt(dataForCalc.get("limateStrengthBolt_Mpa"))
@@ -1001,6 +1005,15 @@ public class MomentController {
                     , Double.parseDouble(dataForCalc.get("k_threadDepth"))
                     , Double.parseDouble(dataForCalc.get("safetyFactor")));
 
+//        int powerMaxByThreadBolt_N = momentService.powerMaxByLimitOnOneTrust_N(
+//                toDouble(dataForCalc.get("diametrThread_mm")),
+//                toDouble(dataForCalc.get("middleDiamThread_mm")),
+//                toDouble(dataForCalc.get("stepThread_mm")),
+//                toInt(dataForCalc.get("limateStrengthBolt_Mpa")),
+//                toDouble(dataForCalc.get("safetyFactor")),
+//                toDouble(dataForCalc.get("k_threadDepth")));
+
+
         int powerMaxByThreadScrew_N = momentService.powerMaxByLimitInThread_N(
                 Integer.parseInt(dataForCalc.get("limateStrengthScrew_Mpa"))
                 , Double.parseDouble(dataForCalc.get("diametrThread_mm"))
@@ -1008,23 +1021,32 @@ public class MomentController {
                 , Double.parseDouble(dataForCalc.get("k_threadDepth"))
                 , Double.parseDouble(dataForCalc.get("safetyFactor")));
 
+//        int powerMaxByThreadScrew_N = momentService.powerMaxByLimitOnOneTrust_N(
+//                toDouble(dataForCalc.get("diametrThread_mm")),
+//                toDouble(dataForCalc.get("middleDiamThread_mm")),
+//                toDouble(dataForCalc.get("stepThread_mm")),
+//                toInt(dataForCalc.get("limateStrengthScrew_Mpa")),
+//                toDouble(dataForCalc.get("safetyFactor")),
+//                toDouble(dataForCalc.get("k_threadDepth")));
+
+
             int powerMaxByBolt_N = momentService.powerMaxByLimitInBoltRot_N (
-                    Integer.parseInt(dataForCalc.get("limateStrengthBolt_Mpa")),
-                    Double.parseDouble(dataForCalc.get("diametrThread_mm"))
-                    , Double.parseDouble(dataForCalc.get("safetyFactor")));
+                    toInt(dataForCalc.get("limateStrengthBolt_Mpa")),
+                    toDouble(dataForCalc.get("diametrThread_mm"))
+                    , toDouble(dataForCalc.get("safetyFactor")));
 
         /**
-         * максимально допустимая сила
+         * максимально допустимая сила из трех ранее вычисленных
          */
         int powerMaxLimitForMaterial_N = momentService.powerMax_N(powerMaxByBolt_N
                         ,powerMaxByThreadBolt_N
                         , powerMaxByThreadScrew_N
                         ,noBolt);
 
-        dataForCalc.put("powerMaxForMaterial_kgs", String.valueOf(powerMaxLimitForMaterial_N * 0.1));
+        dataForCalc.put("powerMaxForMaterial_kgs", String.valueOf((int) (powerMaxLimitForMaterial_N * 0.1)));
 
         /**
-         * напрежение в стержне болта
+         * напряжение в стержне болта
          */
         int stregthBoltRot_Mpa = momentService.strengthInBoltRot_Mpa(powerMaxLimitForMaterial_N, Double.parseDouble(dataForCalc.get("diametrThread_mm")));
 
@@ -1046,7 +1068,7 @@ public class MomentController {
                 ,Double.parseDouble(dataForCalc.get("diametrHead_mm"))
                 ,Double.parseDouble(dataForCalc.get("diametrHole_mm")));
 
-        dataForCalc.put("momentKellerman_NM", String.valueOf(momentKellerman_NM));
+        dataForCalc.put("momentKellerman_NM",new DecimalFormat("#.#").format(momentKellerman_NM));
 
 /**
  * обнуление всех кукиес cookies для материала
