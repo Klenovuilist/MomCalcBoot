@@ -30,7 +30,7 @@ deploy_job:                 # Сборка.
 #    - $ echo "$PRIVATE_SSH_KEY" | grep '^-----BEGIN PRIVATE KEY-----.*$' > /dev/null || echo "Ошибка: Неверный формат приватного ключа."
 #    - echo "$PUBLIC_SSH_KEY" > ~/.ssh/id_ed25519.pub
     - echo "$PRIVATE_SSH_KEY" > ~/.ssh/id_ed25519
-#    - chmod 600 ~/.ssh/id_ed25519
+    - chmod 600 ~/.ssh/id_ed25519
     - ssh-keyscan -H 45.131.42.166 >> ~/.ssh/known_hosts
     - scp ${CI_PROJECT_DIR}/${TARGET_JAR} root@45.131.42.166:/tmp/${APP_NAME}.jar
 #    - ssh root@45.131.42.166 << EOF                   # подключение к серверу
