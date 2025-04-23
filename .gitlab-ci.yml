@@ -42,11 +42,7 @@ build_job:                 # Сборка.
 deploy_job:
   stage: deploy
   script:
-    - mkdir -p ~/.ssh && chmod 700 ~/.ssh
-#    - echo "$PRIVATE_SSH_KEY" > ~/.ssh/id_ed25519
-#    - chmod 600 ~/.ssh/id_ed25519
-    - ssh-keyscan -H 45.131.42.166 >> ~/.ssh/known_hosts
-    - scp ${CI_PROJECT_DIR}/${TARGET_JAR} root@45.131.42.166:/tmp/${APP_NAME}.jar
+    - docker compose up -d
 
 
 

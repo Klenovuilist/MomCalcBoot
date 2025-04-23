@@ -1,43 +1,85 @@
-﻿version: "3.8"
+﻿#для запуска на сервере с nginx
+# приложение по докер файлу
+#version: "3.8"
 
 services:
   postgres:
     container_name: 'PSQL_Moment'
+
+# Порты контейнера
+# При подключении к БД из вне контейнера использовать localhost и внешний порт
     ports:
-      - '5303:5432'
+      - '5304:5303'
     environment:
       POSTGRES_PASSWORD: 123
       POSTGRES_USER: postgres
-      POSTGRES_DB: MomentNM
-    image: 'postgres:15.1'
+      POSTGRES_DB: MomentNM_D
+    image: postgres:15.12-alpine3.21
+    networks:
+      - net226
 
-
+    #  команда после установки образа:
+#  изменение порта для postgres - должен совпадать с внутренним портом контейнера
+    command:
+      - "postgres"
+      - "-c"
+      - "port=5303"
+    volumes:
+      - /root/d_p/pgdata_226:/var/lib/postgresql/data  # Том для сохранения данных вне контейнера
 
   app:
     build:
-#       . - папка с docker файлом
+
+#       . - текущая папка с docker файлом
       context: .
 #      сборка образа приложения по docker файлом
       dockerfile: Dockerfile
+    networks:
+        - net226
 
+    container_name: moment_calc
     ports:
-#      внутренний порт такой же как в апликешин, внешний любой
-      - "8067:8077"
+#      внешний порт любой(80 или 443 что бы не вводить при зпросе)
+#      внутренний порт такой же как в апликешин - связь контейнера с приложением
+
+      - "8000:8077"
+
 #      порт для удаленного дебага 5005 по умолчанию
       - "5004:5004"
     environment:
 #      port: 8077
       spring.datasource.username: postgres
 #      URL для подключения к внутреней сети Docker - "postgres" как в разделе services
-#      вместо localhost подключение по внутренней сети docker
-#      к БД //postgres - тоже имя что и services:
-      #  postgres:
-
-      spring.datasource.url: jdbc:postgresql://postgres/MomentNM
+#      + порт //postgres:5303 если изменен (стандарт 5432 допускается не писать)
+      spring.datasource.url: jdbc:postgresql://postgres:5303/MomentNM_D
       spring.datasource.password: 123
 
 
     depends_on:
       - postgres
+
+  nginx:
+    image: nginx
+    container_name: moment_nginx
+    ports:
+      - "80:80"  # Доступен на порту 80
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf  # Подключение конфигурационного файла  /etc/nginx/conf.d/
+      - /etc/letsencrypt/:/etc/letsencrypt/  # Папка с сертификатами
+    depends_on:
+      - app
+    networks:
+      - net226
+
+
+networks:
+  net226:
+    driver: bridge
+
+volumes:
+  pgdata_226:  # Объявление волюмс
+    driver: local  # Тип драйвера по умолчанию
+
 
 
