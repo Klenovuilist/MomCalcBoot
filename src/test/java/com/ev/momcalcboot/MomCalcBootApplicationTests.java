@@ -15,6 +15,7 @@ import org.junit.jupiter.api.*;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -23,7 +24,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
+//@SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_METHOD) // объект класса MomCalcBootApplicationTests будет сщздан перед каждым методом тест
 
 
@@ -32,7 +33,7 @@ class MomCalcBootApplicationTests {
     @InjectMocks
     SqrewService sqrewService;
 
-    @Autowired
+    @Mock
     BoltService boltService;
 
     @Mock
@@ -46,6 +47,11 @@ class MomCalcBootApplicationTests {
 
     @Mock
     UserDao userDao;
+
+    @BeforeEach
+    public void setup() { // Инит-моки перед каждым тестом
+        MockitoAnnotations.initMocks(this);
+    }
 
     @Test
     @Tag("sqrew")// для определения какие тесты запустяться
