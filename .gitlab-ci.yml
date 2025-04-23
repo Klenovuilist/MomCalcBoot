@@ -23,8 +23,8 @@ build_job:                 # Сборка.
 
 deploy_job:                 # Сборка.
   stage: deploy             # этап (первый)
-  only:
-    - master
+#  only:
+#    - master
   script:                  # скрипт для выполнения задачи
     - mkdir -p ~/.ssh && chmod 700 ~/.ssh
     - echo "$PRIVATE_SSH_KEY" > ~/.ssh/id_ed25519
