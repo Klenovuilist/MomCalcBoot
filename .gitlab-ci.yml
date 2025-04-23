@@ -30,10 +30,10 @@ deploy_job:                 # Сборка.
     - echo "$PRIVATE_SSH_KEY" > ~/.ssh/id_ed25519
     - chmod 600 ~/.ssh/id_ed25519
     - scp ${CI_PROJECT_DIR}/${TARGET_JAR} root@45.131.42.166:/tmp/${APP_NAME}.jar
-    - ssh root@45.131.42.166 << EOF                   # подключение к серверу
-      mkdir -p /opt/apps/${APP_NAME}/current           # создание новой папки /opt/apps/${APP_NAME}/current на сервере
-      mv /tmp/${APP_NAME}.jar /opt/apps/${APP_NAME}/current/  # перемещение файла из /tmp в /opt/apps/${APP_NAME}/current/
-      EOF
+#    - ssh root@45.131.42.166 << EOF                   # подключение к серверу
+#      mkdir -p /opt/apps/${APP_NAME}/current           # создание новой папки /opt/apps/${APP_NAME}/current на сервере
+#      mv /tmp/${APP_NAME}.jar /opt/apps/${APP_NAME}/current/  # перемещение файла из /tmp в /opt/apps/${APP_NAME}/current/
+#      EOF
 
 
 #deploy_job:
