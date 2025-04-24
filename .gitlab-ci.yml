@@ -45,9 +45,6 @@ deploy_job:
     - docker compose up -d
 
 
-
-
-
 #deploy_job:
 #  stage: deploy            # этап деплоинга
 #  only:
