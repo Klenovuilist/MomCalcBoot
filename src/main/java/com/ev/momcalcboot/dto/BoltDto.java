@@ -17,16 +17,11 @@ public class BoltDto {
 
     private Integer limit;
 
-
     private String comment;
-
 
     private LocalDateTime dataCreate;
 
-
     private Double classBolt;
-
-
 
     private UserEntity user;
 }

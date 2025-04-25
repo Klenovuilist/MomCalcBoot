@@ -13,8 +13,6 @@ import java.util.Map;
 @Service
 public class MaterialService {
 
-
-
     public MaterialsEntity getMaterialByRequestParam(Map<String, String> dataFromForm) {
 
         return MaterialsEntity.builder()
@@ -22,25 +20,6 @@ public class MaterialService {
                 .coeffFricThread(toDouble(dataFromForm.get("coefficientOfFrictionThread")))
                 .safetyFactor(toDouble(dataFromForm.get("safetyFactor")))
                 .build();
-
-        //        dataForm.put("limateStrengthBolt_Mpa", null);
-//        dataForm.put("limateStrengthScrew_Mpa", null);
-//        dataForm.put("diametrThread_mm", null);
-//        dataForm.put("threadIdForm", null);
-//        dataForm.put("threadName", null);
-//        dataForm.put("middleDiamThread_mm", null);
-//        dataForm.put("k_threadDepth", null);
-//        dataForm.put("safetyFactor", null);
-//        dataForm.put("powerMaxForMaterial_kgs", null);
-//
-//        dataForm.put("stepThread_mm", null);
-//        dataForm.put("coefficientOfFrictionThread", null);
-//        dataForm.put("coefficientOfFrictionBoltHead", null);
-//        dataForm.put("diametrHead_mm", null);
-//        dataForm.put("diametrHole_mm", null);
-//        dataForm.put("momentKellerman_NM", null);
-
-
     }
 
     public MaterialsEntity getMaterialParamDefoult(){

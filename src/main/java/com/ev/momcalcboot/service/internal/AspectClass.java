@@ -15,11 +15,10 @@ public class AspectClass {
     @Pointcut("@annotation(com.ev.momcalcboot.service.internal.SoutAOP)")
     public void soutText(){}
 
-
     @Before("soutText()")
     public void addText(){
-      log.info("Aspect_123_226_ready");
-        System.out.println("Aspect_123_226_ready");
+//      log.info("Aspect_123_226_ready");
+        System.out.println("Вызов метода");
     }
 
 }

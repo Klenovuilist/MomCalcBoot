@@ -20,7 +20,7 @@ public class ControllerMaterialDelete {
     MomentsDao momentsDao;
 
     @GetMapping("/materials_delete/{id}")
-    public String materialsDelete(@PathVariable("id") int id){
+    public String materialsDelete(@PathVariable("id") int id) {
 
         MaterialsEntity materalForDelete = materialsDao.getMaterialsById(id);
 

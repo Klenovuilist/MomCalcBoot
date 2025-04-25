@@ -28,10 +28,9 @@ public class SqrewService {
     private  final UserDaoRepository userDaoRepository;
 
     private final UserDao userDao;
+
     /**
-     * 1111
-     * @param userId
-     * @return
+    * Гайки по userId
      */
     public List<SqrewEntity> getSqrewsByUserId(int userId){
 
@@ -43,23 +42,19 @@ public class SqrewService {
             for (SqrewEntity sqrew: sqrewEntities){
                 sqrew.setDataCreatePars(dataFormater.format(sqrew.getDataCreate()));
             }
-
         }
-
         return sqrewEntities;
     }
 
     /**
-     * 111
-     * @return
+     * Гайки Admin
      */
     public List<SqrewEntity> getSqrewsAdmin(){
-
         return  sqrewDaoRepository.getAdminSqrew();
     }
 
     /**
-     *  111
+     *  Полный список гаек User и Admin
      */
     public List<SqrewEntity> getAllSqrewAdminUser(int userId, List<SqrewEntity> sqrewUser, List<SqrewEntity> sqrewAdmin){
 
@@ -76,55 +71,36 @@ public class SqrewService {
     }
 
     /**
-     * 1111
-     * @param request
-     * @return
+     *
      */
     public SqrewEntity getSqrewByRequestParam(HttpServletRequest request) {
 
         var sqrew = new SqrewEntity();
 
-
-        /**
-         * ������ ���������
-         */
         String limit = request.getParameter("limitSqrew");
 
         if (Strings.isNotBlank(limit)) {
-
             sqrew.setLimit(Integer.parseInt(limit));
         } else {
             sqrew.setLimit(0);
         }
 
-        /**
-         * ���
-         */
         String name = request.getParameter("name");
 
         if (Strings.isNotBlank(name)) {
-
             sqrew.setName(name);
         } else {
             sqrew.setName("No name");
         }
 
-        /**
-         * �����������
-         */
         String comments = request.getParameter("comments");
 
         if (Strings.isNotBlank(comments)) {
-
             sqrew.setComment(comments);
         } else {
             sqrew.setComment(null);
         }
 
-
-        /**
-         * ����� ���������
-         */
         String classSqrew = request.getParameter("classSqrew");
 
         if (Strings.isNotBlank(classSqrew)) {
@@ -134,14 +110,8 @@ public class SqrewService {
             sqrew.setClassSqrew(0d);
         }
 
-        /**
-         * ����� ��������
-         */
         sqrew.setDataCreate(java.time.LocalDateTime.now());
 
-        /**
-         * ������� ������
-         */
         String depth = request.getParameter("kDepth");
 
         if (Strings.isNotBlank(depth)) {
@@ -151,22 +121,15 @@ public class SqrewService {
             sqrew.setClassSqrew(0.8);
         }
 
-
         return sqrew;
     }
 
-    /**
-     *11111111
-     */
     public SqrewEntity getSqrewByRequestSqrewIdOrParam(HttpServletRequest request) {
 
         return sqrewDaoRepository.getSqrewById(Integer.parseInt(request.getParameter("sqrewId")));
 
     }
 
-    /**
-     *1111
-     */
     public SqrewEntity getSqrewByRequestSqrewIdOrParam(List<SqrewEntity> sqrews, HttpServletRequest request) {
 
         return sqrews.stream().
@@ -176,19 +139,15 @@ public class SqrewService {
 
     }
 
-
-
     /**
-     *111
+     * Сохранение значений гайки по параметрам из формы
      */
     public boolean saveSqrewsByParametrForm(HttpServletRequest request, List<SqrewEntity> sqrewsUser, Integer userId){
 
         if(Objects.nonNull(userId)){
-
             UserEntity user =  userDaoRepository.getUserById(userId);
 
             sqrewsUser.forEach(sqrew ->{
-
                 boolean saveKey = false;
 
 
@@ -207,10 +166,7 @@ public class SqrewService {
                     saveKey = true;
                 }
 
-
-
                 if (Strings.isNotBlank(request.getParameter("limit" + sqrew.getId()))) {
-
                     if (sqrew.getLimit() == null) {
                         sqrew.setLimit(Integer.parseInt(request.getParameter("limit" + sqrew.getId())));
                         saveKey = true;
@@ -218,12 +174,10 @@ public class SqrewService {
                         sqrew.setLimit(Integer.parseInt(request.getParameter("limit" + sqrew.getId())));
                         saveKey = true;
                     }
-
                 }
 
 
                 if (Strings.isNotBlank(request.getParameter("classSqrew" + sqrew.getId()))){
-
                     if (sqrew.getClassSqrew() == null) {
                         sqrew.setClassSqrew(toDouble(request.getParameter("classSqrew" + sqrew.getId())));
                         saveKey = true;
@@ -235,7 +189,6 @@ public class SqrewService {
                 }
 
                 if (Strings.isNotBlank(request.getParameter("depth" + sqrew.getId()))) {
-
                     if (sqrew.getDepth() == null) {
                         sqrew.setDepth(toDouble(request.getParameter("depth" + sqrew.getId())));
                      saveKey = true;
@@ -269,14 +222,10 @@ public class SqrewService {
     }
 
     /**
-     * 111
+     * Сохранение новой гайки
      * */
     public  boolean saveNewSqrew(Integer UserId, HttpServletRequest request){
-//        "bolt_name_new"
-//    "bolt_limit_new"
-//    "bolt_classBolt_new"
-//    "bolt_dataCreate_new"
-//    "bolt.comment_new"
+
         boolean saveKey = false;
 
         String name = null;
@@ -286,30 +235,24 @@ public class SqrewService {
         Double depth = 0.8;
 
         if (Strings.isNotBlank(request.getParameter("sqrew_name_new"))){
-
             name = request.getParameter("sqrew_name_new");
             saveKey = true;
 
             if (Strings.isNotBlank(request.getParameter("sqrew_limit_new"))) {
-
                 limit = Integer.parseInt(request.getParameter("sqrew_limit_new"));
             }
 
             if (Strings.isNotBlank(request.getParameter("sqrew_classSqrew_new"))) {
-
                 classSqrew = toDouble(request.getParameter("sqrew_classSqrew_new"));
             }
 
 
             if (Strings.isNotBlank(request.getParameter("sqrew_depth_new"))) {
-
                 depth = toDouble(request.getParameter("sqrew_depth_new"));
             }
 
             if (Strings.isNotBlank(request.getParameter("sqrew.comment_new"))) {
-
                 commets = request.getParameter("sqrew.comment_new");
-
             }
         }
 
@@ -338,16 +281,17 @@ public class SqrewService {
     }
 
     /**
-     * 111
-     * */
+     * Удаление гайки
+     */
     public boolean deleteSqrew(int sqrewId){
 
         return sqrewDaoRepository.deleteSqrew(sqrewId);
     }
 
     /**
-     * ���������� ������ ��������� ����������
+     * Установка класса гайки ()
      * */
+//    todo - сделать согласно ГОСТ
     public double calcClassSqrew(int limitSqrew) {
 
         Map<Integer, Double> classGOST = new HashMap<>();
@@ -365,13 +309,11 @@ public class SqrewService {
         classGOST.put(900, 10.9);
         classGOST.put(1080, 12.9);
 
-//        Set<Integer> limitGOST = classGOST.keySet(); // ������ ������
 
-        List<Integer> limitGOSTlist = new ArrayList<>(classGOST.keySet());//������ ������ � ��� ����
+        List<Integer> limitGOSTlist = new ArrayList<>(classGOST.keySet());
 
-        List<Integer> limitGOSTsort = limitGOSTlist.stream().sorted().collect(Collectors.toList()); // ���������� �����
+        List<Integer> limitGOSTsort = limitGOSTlist.stream().sorted().collect(Collectors.toList());
 
-//        limitGOSTlist.add(limitSqrew); //���������� � ���� �������� �����
         int count = 0;
 
         for (; count < limitGOSTsort.size(); count++){

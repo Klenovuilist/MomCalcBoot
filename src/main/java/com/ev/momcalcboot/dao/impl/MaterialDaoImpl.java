@@ -29,7 +29,7 @@ public class MaterialDaoImpl implements MaterialsDao {
 
     }
 
-    @Transactional
+
         public int materals_dbSize() {
 
         Session session = entityManager.unwrap(Session.class);
@@ -38,7 +38,7 @@ public class MaterialDaoImpl implements MaterialsDao {
         return materals_entity.size();
     }
 
-    @Transactional
+
     @Override
     public List<MaterialsEntity> getMateralsEntity() {
         Session session = entityManager.unwrap(Session.class);
@@ -47,7 +47,7 @@ public class MaterialDaoImpl implements MaterialsDao {
 
     }
 
-    @Transactional()
+
     @Override
     public void save(MaterialsEntity materialsEntity) {
         Session session = entityManager.unwrap(Session.class);
@@ -55,7 +55,6 @@ public class MaterialDaoImpl implements MaterialsDao {
         session.save(materialsEntity);
     }
 
-    @Transactional
 
     @Override
     public MaterialsEntity getMaterialsById(int MaterialId) {
@@ -69,7 +68,7 @@ public class MaterialDaoImpl implements MaterialsDao {
 
 //        return session.get(Materals_db.class, MaterialId);
     }
-@Transactional
+
     @Override
     public List getMaterialsByUserId(int UserId) {
 
@@ -79,13 +78,13 @@ public class MaterialDaoImpl implements MaterialsDao {
 
         return query.getResultList();
     }
-    @Transactional
+
     @Override
     public void updateMaterial(MaterialsEntity materals_entity) {
         Session session = entityManager.unwrap(Session.class);
         session.update(materals_entity);
     }
-    @Transactional
+
     @Override
     public void materialRemove(MaterialsEntity materals_entity) {
         Session session = entityManager.unwrap(Session.class);

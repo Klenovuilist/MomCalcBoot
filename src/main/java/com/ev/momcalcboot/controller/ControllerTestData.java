@@ -51,44 +51,41 @@ public class ControllerTestData {
 
     int i = 0;
 
+    /**
+     * Тестовая страница. Загрузка и проверка первичных данных в БД
+     */
+
     @GetMapping("/test_data")
     public String getTestPage(Model model) throws InterruptedException {
 
-//    Map<String,Boolean> resultLoadMap = testDatalLoad.loadBdTestData();
         if (resultLoadMap.isEmpty()) {
             resultLoadMap = testDatalLoad.loadBdTestData(false);
         }
         model.addAttribute("mapLoad", resultLoadMap);
 
-        if (! boltEntities.isEmpty()) {
+        if (!boltEntities.isEmpty()) {
             model.addAttribute("allBolts", boltEntities);
-
         }
 
         if (!sqrewEntities.isEmpty()) {
             model.addAttribute("allSqrews", sqrewEntities);
-
         }
 
         if (!userDtoList.isEmpty()) {
             model.addAttribute("allUsers", userDtoList);
-
         }
 
-        if (! threadDTOList.isEmpty()){
+        if (!threadDTOList.isEmpty()) {
             model.addAttribute("allThreads", threadDTOList);
-
         }
         model.addAttribute("sql1", sql);
 
-//        i++;
-//        if (i % 2 > 0){
-//            Thread.sleep(10_000);//
-//        }//
-//        System.out.println("cont = " + i + "  Thread = " + Thread.currentThread().getName());
-
         return "test.html";
     }
+
+    /**
+     * Получение всех данных (первичных) (кнопка из формы)
+     */
 
     @GetMapping("/test_data/{load}")
     public String loadData(@PathVariable("load") String load, Model model) {
@@ -109,19 +106,20 @@ public class ControllerTestData {
             userDtoList.addAll(userDtoService.getAllUserDto());
             threadDTOList.addAll(threadDtoService.getAllThreadDto());
         }
-
-
-
         return "redirect:/test_data";
 
     }
 
-    @PostMapping("/test_data")
-    public String sqlRequest(HttpServletRequest request){
+    /**
+     * Загрузка в БД данных по произвольному SQL запросу
+     */
 
-       if (testDatalLoad.loadData(request.getParameter("sql"))){
-           sql = request.getParameter("sql");
-       }
+    @PostMapping("/test_data")
+    public String sqlRequest(HttpServletRequest request) {
+
+        if (testDatalLoad.loadData(request.getParameter("sql"))) {
+            sql = request.getParameter("sql");
+        }
 
         return "redirect:/test_data";
     }

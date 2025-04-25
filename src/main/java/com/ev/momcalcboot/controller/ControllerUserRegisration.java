@@ -26,7 +26,10 @@ public class ControllerUserRegisration {
 
     private final CookService cookService;
 
-@GetMapping("/user_registration")
+    /**
+     * Регистрация пользователя
+     * */
+    @GetMapping("/user_registration")
     public String registrationUser(HttpServletRequest request, Model model){
 
     model.addAttribute("userInfo", "enter your username and password");
@@ -57,12 +60,6 @@ public class ControllerUserRegisration {
                 , userEntity.getUserName()
                 , userEntity.getRoleUser());
 
-//        Cookie cookieUser = new Cookie("userId", String.valueOf(user.getId()));
-//        response.addCookie(cookieUser);
-//
-//        response.addCookie(new Cookie("userName", user.getUserName()));
-//
-//        response.addCookie(new Cookie("userRole", user.getRoleUser()));
 
         Cookie cookie = new Cookie("userInfo", "0");
         cookie.setMaxAge(0);
@@ -79,14 +76,19 @@ public class ControllerUserRegisration {
 
         }
     }
+
+    /**
+     * Страница регистрации пользователя
+     * */
     @GetMapping("/users_create")
     public String userCreate(){
 
-
         return "users_create.html";
-
     }
 
+    /**
+     * Подтверждение создания нового пользователя (кнопка регистрации)
+     * */
     @GetMapping("/users_create_enter")
     public String userCreateEnter(Model model, HttpServletRequest request, HttpServletResponse response){
 
@@ -112,7 +114,6 @@ public class ControllerUserRegisration {
 
         LocalDate localDate = LocalDate.now();
 
-//        Date data = new Date(localDate.getYear() - 1900, localDate.getMonthValue() - 1, localDate.getDayOfMonth());
         UserEntity userEntity = UserEntity.builder()
                 .userName(request.getParameter("nameUser"))
                 .passwordUser(request.getParameter("passwordUser1"))
@@ -125,13 +126,6 @@ public class ControllerUserRegisration {
         return "redirect:/";
 
     }
-
-    /**
-     * Запрос с json с теле запроса от клиента
-     * @param userDto
-     * @param model
-     * @return
-     */
 
     @PostMapping("/users")
     public String getUser(@RequestBody List<UserDto> userDto, Model model){

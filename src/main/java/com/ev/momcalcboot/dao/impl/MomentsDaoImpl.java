@@ -24,32 +24,24 @@ public class MomentsDaoImpl implements MomentsDao {
     }
 
     @Override
-    @Transactional
     public List<MomentsEntity> getMoments_db() {
         Session session = entityManager.unwrap(Session.class);
 
-
        return session.createQuery("from MomentsEntity mom join fetch mom.thread", MomentsEntity.class).getResultList();
-
-
-
-//        return session.createQuery("from Moments_db m join fetch m.thread join fetch m.materals_db", Moments_db.class).getResultList();
-    }
+  }
 
     @Override
-    @Transactional
     public void saveAll(MomentsEntity moments_dbs) {
         Session session = entityManager.unwrap(Session.class);
         session.save(moments_dbs);
       }
-    @Transactional
+
     @Override
     public void updateMoment(MomentsEntity moments_entity) {
         Session session = entityManager.unwrap(Session.class);
         session.update(moments_entity);
     }
 
-    @Transactional
     @Override
     public List<MomentsEntity> momentsByIdMaterial(int idMaterial) {
         Session session = entityManager.unwrap(Session.class);
@@ -60,12 +52,10 @@ public class MomentsDaoImpl implements MomentsDao {
         List<MomentsEntity> moments_entities = (List<MomentsEntity>)query.getResultList();
         return moments_entities;
     }
-@Transactional
     @Override
     public void momentRemove(MomentsEntity moments_entity) {
     Session session = entityManager.unwrap(Session.class);
         session.remove(moments_entity);
     }
-
 
 }
