@@ -64,6 +64,7 @@ public class ControllerBolt {
         /**
          * Список болтов админа (id =1)
          */
+
         model.addAttribute("boltsAdmin", boltService.boltsAdmin());
 
         /**
@@ -75,6 +76,7 @@ public class ControllerBolt {
 
         return "all_bolt.html";
     }
+
 
     /**
      * Сохранение всех значений болтов по данным из формы

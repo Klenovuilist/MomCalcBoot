@@ -114,6 +114,7 @@ public class ControllerAdmin {
      */
     @GetMapping("/bolt_delete/{id}/{userId}")
     public String deleteBoltById(@PathVariable("id") int boltId, @PathVariable("userId") int userId, Model model) {
+
         try {
             adminService.deleteBoltById(boltId);
 
