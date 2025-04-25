@@ -6,7 +6,8 @@ import com.ev.momcalcboot.Entity.SqrewEntity;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Service;
-
+import static com.ev.momcalcboot.service.internal.ParserNumber.toDouble;
+import static com.ev.momcalcboot.service.internal.ParserNumber.toInt;
 import java.util.Map;
 
 @Service
@@ -17,9 +18,9 @@ public class MaterialService {
     public MaterialsEntity getMaterialByRequestParam(Map<String, String> dataFromForm) {
 
         return MaterialsEntity.builder()
-                .coeffFricBoltHead(Double.parseDouble(dataFromForm.get("coefficientOfFrictionBoltHead")))
-                .coeffFricThread(Double.parseDouble(dataFromForm.get("coefficientOfFrictionThread")))
-                .safetyFactor(Double.parseDouble(dataFromForm.get("safetyFactor")))
+                .coeffFricBoltHead(toDouble(dataFromForm.get("coefficientOfFrictionBoltHead")))
+                .coeffFricThread(toDouble(dataFromForm.get("coefficientOfFrictionThread")))
+                .safetyFactor(toDouble(dataFromForm.get("safetyFactor")))
                 .build();
 
         //        dataForm.put("limateStrengthBolt_Mpa", null);

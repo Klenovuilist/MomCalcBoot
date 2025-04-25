@@ -2,10 +2,7 @@ package com.ev.momcalcboot.Entity;
 
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
@@ -15,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "thread_db")
-public class ThreadEntity {
+public class ThreadEntity implements Comparable {
     @Id
     @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,6 +38,15 @@ public class ThreadEntity {
 
     @OneToMany(mappedBy = "thread",fetch = FetchType.LAZY)
     private List<MomentsEntity> moments_entity;
+
+    @Override
+    public int compareTo(@NonNull Object o) {
+        ThreadEntity thread_1 = (ThreadEntity)o;
+        Double numberThread_1 = Double.parseDouble(thread_1.getThread().substring(1));
+        Double numberThreadCurrent = Double.parseDouble(this.thread.substring(1));
+
+        return numberThreadCurrent.compareTo(numberThread_1);
+    }
 
 //    @Column(name = "step_thread")
 //    private  String stepThread;

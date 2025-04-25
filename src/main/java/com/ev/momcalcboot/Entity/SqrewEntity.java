@@ -1,18 +1,14 @@
 package com.ev.momcalcboot.Entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
-import java.sql.Date;
 import java.time.LocalDateTime;
 
+@Data
 @Entity()
 @Table(name = "sqrew_entity")
-@Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -48,13 +44,12 @@ public class SqrewEntity {
     @JoinColumn(name = "id_user", referencedColumnName = "id")
     private UserEntity user;
 
+    @Transient
+    private String dataCreatePars;
 
-    @Override
-    public String toString() {
-        return "SqrewEntity{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", limit=" + limit +
-                '}';
+
+    protected boolean canEqual(final Object other) {
+        return other instanceof SqrewEntity;
     }
+
 }

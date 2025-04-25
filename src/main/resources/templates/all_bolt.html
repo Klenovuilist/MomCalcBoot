@@ -48,7 +48,7 @@
 
             <!-- Таблица болты пользователь               -->
 
-                <table class="table table-bordered">
+                <table class="table table-bordered" >
                     <thead>
                     <tr class="table-warning table align-middle">
 
@@ -94,7 +94,7 @@
                                        th:name="'comments' + ${bolt.getId()}" th:value="${bolt.getComment()}"  size="10" />
                             </th>
                             <th>
-                                <h6> <a th:text="${bolt.getDataCreate()}">  </a> </h6>
+                                <P class="fs-6" th:text="${bolt.getDataCreateParsing()}" ></P>
                             </th>
                             <th>
                                <a th:href = "@{/all_bolt/{id}(id = ${bolt.getId()})}" >   <h8>удалить</h8>  </a>
@@ -130,7 +130,7 @@
 
             </form>
             <p></p>
-            <form action = "/moment_page_1" method = "get">
+            <form action = "/" method = "get">
 
                 <div class="d-grid gap-2 d-md-block">
                     <button class="btn btn-dark" id="submit2" type="submit"> На главную </button>

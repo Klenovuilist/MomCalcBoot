@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import static com.ev.momcalcboot.service.internal.ParserNumber.toDouble;
+import static com.ev.momcalcboot.service.internal.ParserNumber.toInt;
 
 @Service
 @AllArgsConstructor
@@ -52,7 +54,7 @@ private  final SqrewDaoRepository sqrewDaoRepository;
             int limit = 0;
             if (Strings.isNotBlank(request.getParameter("limit" + materal.getId()))){
 
-               limit = Integer.parseInt(request.getParameter("limit" + materal.getId()));
+               limit = toInt(request.getParameter("limit" + materal.getId()));
 
                if(limit != materal.getLimitStrength()){
                     materal.setLimitStrength(limit);
@@ -77,7 +79,7 @@ private  final SqrewDaoRepository sqrewDaoRepository;
 
             if(Strings.isNotBlank(request.getParameter("class" + materal.getId()))) {
 
-                strengthClass = Double.parseDouble(request.getParameter("class" + materal.getId()));
+                strengthClass = toDouble(request.getParameter("class" + materal.getId()));
 
                 if(! strengthClass.equals(materal.getStrengthClass())){
                     materal.setStrengthClass(strengthClass);

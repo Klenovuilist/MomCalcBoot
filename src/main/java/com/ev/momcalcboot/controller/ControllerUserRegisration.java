@@ -68,7 +68,7 @@ public class ControllerUserRegisration {
         cookie.setMaxAge(0);
         response.addCookie(cookie);
 
-        return "redirect:/moment_page_1";
+        return "redirect:/";
 
     }
     catch (NoResultException e){
@@ -122,7 +122,7 @@ public class ControllerUserRegisration {
 
         cookService.setCookiesForUserResponse(response, String.valueOf(userEntity.getId()), userEntity.getUserName(), userEntity.getRoleUser());
 
-        return "redirect:/moment_page_1";
+        return "redirect:/";
 
     }
 

@@ -4,7 +4,7 @@ services:
   postgres:
     container_name: 'PSQL_Moment'
     ports:
-      - '5303:5302'
+      - '5303:5432'
     environment:
       POSTGRES_PASSWORD: 123
       POSTGRES_USER: postgres
@@ -29,6 +29,10 @@ services:
 #      port: 8077
       spring.datasource.username: postgres
 #      URL для подключения к внутреней сети Docker - "postgres" как в разделе services
+#      вместо localhost подключение по внутренней сети docker
+#      к БД //postgres - тоже имя что и services:
+      #  postgres:
+
       spring.datasource.url: jdbc:postgresql://postgres/MomentNM
       spring.datasource.password: 123
 

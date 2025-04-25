@@ -1,0 +1,19 @@
+﻿#для запуска на сервере с nginx
+# приложение по докер файлу
+#version: "3.8"
+
+services:
+
+
+  nginx:
+    image: nginx
+    container_name: moment_nginx
+    ports:
+      - "80:80"  # Доступен на порту 80
+#    volumes:
+#      - ./nginx.conf:/etc/nginx/nginx.conf  # Подключение конфигурационного файла  /etc/nginx/conf.d/
+
+
+
+
+

@@ -108,7 +108,12 @@
 
         </dependency>
 
-
+        <!-- https://mvnrepository.com/artifact/org.apache.poi/poi -->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>5.3.0</version>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -117,8 +122,6 @@
             <type>pom</type>
             <scope>compile</scope>
         </dependency>
-
-
 
         <dependency>
             <groupId>org.postgresql</groupId>
@@ -141,7 +144,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
-            <version>RELEASE</version>
+            <version>3.4.2</version>
             <scope>compile</scope>
         </dependency>
 
@@ -162,7 +165,14 @@
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>2.6.0</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
 
 
     </dependencies>
@@ -173,6 +183,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
+
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>
@@ -270,28 +281,28 @@
 <!--            конец, требуется указание папки в манифесте-->
 
 <!--            создание папки с зависемостями в jar архиве при упаковке-->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.7.1</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                        <phase>package</phase>
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-assembly-plugin</artifactId>-->
+<!--                <version>3.7.1</version>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <goals>-->
+<!--                            <goal>single</goal>-->
+<!--                        </goals>-->
+<!--                        <phase>package</phase>-->
 
-                        <configuration>
-                            <descriptorRefs>jar-with-dependencies</descriptorRefs>
-<!--                            <archive>-->
-<!--                                <manifest>-->
-<!--                                   <mainClass>com.ev.momcalcboot.MomCalcBootApplication </mainClass>-->
-<!--                                </manifest>-->
-<!--                            </archive>-->
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+<!--                        <configuration>-->
+<!--                            <descriptorRefs>jar-with-dependencies</descriptorRefs>-->
+<!--&lt;!&ndash;                            <archive>&ndash;&gt;-->
+<!--&lt;!&ndash;                                <manifest>&ndash;&gt;-->
+<!--&lt;!&ndash;                                   <mainClass>com.ev.momcalcboot.MomCalcBootApplication </mainClass>&ndash;&gt;-->
+<!--&lt;!&ndash;                                </manifest>&ndash;&gt;-->
+<!--&lt;!&ndash;                            </archive>&ndash;&gt;-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
         </plugins>
     </build>
 

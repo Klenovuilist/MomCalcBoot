@@ -21,6 +21,7 @@
 <div class="container">
 
     <div class="row">
+<!--        первая колонка -->
         <div class="col-4">
 
             <a href = "/user_registrationEnter" > <p th:text=" ${userName} "> </p> </a>
@@ -87,6 +88,8 @@
             </table>
             <p></p>
         </div>
+
+<!--        вторя колонка-->
         <div class="col-4">
 
             <!-- форма вычисления силы и момента-->
@@ -257,17 +260,26 @@
 
             <!-- третья колонка-->
         </div>
+
+<!--        третья колонка-->
         <div class="col-4">
 
-            <img src="image/vint_image.JPG" class="img-fluid" alt="">
+            <img src="image/vint_image.JPG" class="img-fluid" alt="Винтовое болтовое соединение гайкой, в тело детали, размеры параметры, расчет момента затяжки">
             <p></p>
-            ------------
+            <h6> Уравнение Каллермана - Кляйна (расчет момета затяжки M по заданному усилию F)</h6>
             <p></p>
-            <img src="image/kallerman_1.JPG" class="img-fluid" alt="">
-            ------------
+            <img src="image/f_Kallerman.JPG" class="img-fluid" alt="формула Каллермана Кляйна расчет момента затяжки винтового болтового соединения
+по заданному усилию ">
             <p></p>
-            <img src="image/f_max_1.JPG" class="img-fluid" alt="">
-            -----------
+            <h6> Расчет максимально допустимого усилия по напряжению стрежне болта</h6>
+            <p></p>
+            <img src="image/F_bolt.JPG" class=" w-50 img-fluid" alt="">
+            <p></p>
+            <h6> Расчет максимально допустимого усилия по напряжению в резьбе</h6>
+            <p></p>
+            <img src="image/F_turn.JPG" class=" w-50 img-fluid" alt="">
+            <p></p>
+            <img src="image/note_full.JPG" class=" w-75 img-fluid" alt="описание значений">
         </div>
 
     </div>
@@ -286,7 +298,7 @@
 
                 function buttonSelect(){
                     const form_1 = document.getElementById("buttonGroup");
-                    form_1.setAttribute("action", "/moment_page_1");
+                    form_1.setAttribute("action", "/");
                     form_1.setAttribute("method", "GET");
                 }
                 function buttonAdd(){

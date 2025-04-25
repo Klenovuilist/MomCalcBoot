@@ -1,5 +1,6 @@
 package com.ev.momcalcboot.service.internal;
 
+import com.ev.momcalcboot.Entity.BoltEntity;
 import com.ev.momcalcboot.Entity.SqrewEntity;
 import com.ev.momcalcboot.Entity.UserEntity;
 import com.ev.momcalcboot.dao.UserDao;
@@ -12,9 +13,11 @@ import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
-
+import static com.ev.momcalcboot.service.internal.ParserNumber.toDouble;
+import static com.ev.momcalcboot.service.internal.ParserNumber.toInt;
 
 @Service
 @AllArgsConstructor
@@ -32,7 +35,18 @@ public class SqrewService {
      */
     public List<SqrewEntity> getSqrewsByUserId(int userId){
 
-        return sqrewDaoRepository.getSqrewByUserId(userId);
+        List<SqrewEntity> sqrewEntities = sqrewDaoRepository.getSqrewByUserId(userId);
+
+        if(! sqrewEntities.isEmpty()){
+            DateTimeFormatter dataFormater = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
+
+            for (SqrewEntity sqrew: sqrewEntities){
+                sqrew.setDataCreatePars(dataFormater.format(sqrew.getDataCreate()));
+            }
+
+        }
+
+        return sqrewEntities;
     }
 
     /**
@@ -115,7 +129,7 @@ public class SqrewService {
 
         if (Strings.isNotBlank(classSqrew)) {
 
-            sqrew.setClassSqrew(Double.parseDouble(classSqrew));
+            sqrew.setClassSqrew(toDouble(classSqrew));
         } else {
             sqrew.setClassSqrew(0d);
         }
@@ -132,7 +146,7 @@ public class SqrewService {
 
         if (Strings.isNotBlank(depth)) {
 
-            sqrew.setClassSqrew(Double.parseDouble(depth));
+            sqrew.setClassSqrew(toDouble(depth));
         } else {
             sqrew.setClassSqrew(0.8);
         }
@@ -211,11 +225,11 @@ public class SqrewService {
                 if (Strings.isNotBlank(request.getParameter("classSqrew" + sqrew.getId()))){
 
                     if (sqrew.getClassSqrew() == null) {
-                        sqrew.setClassSqrew(Double.parseDouble(request.getParameter("classSqrew" + sqrew.getId())));
+                        sqrew.setClassSqrew(toDouble(request.getParameter("classSqrew" + sqrew.getId())));
                         saveKey = true;
                     }
-                    else if (Double.parseDouble(request.getParameter("classSqrew" + sqrew.getId())) != sqrew.getClassSqrew()) {
-                        sqrew.setClassSqrew(Double.parseDouble(request.getParameter("classSqrew" + sqrew.getId())));
+                    else if (toDouble(request.getParameter("classSqrew" + sqrew.getId())) != sqrew.getClassSqrew()) {
+                        sqrew.setClassSqrew(toDouble(request.getParameter("classSqrew" + sqrew.getId())));
                         saveKey = true;
                     }
                 }
@@ -223,10 +237,10 @@ public class SqrewService {
                 if (Strings.isNotBlank(request.getParameter("depth" + sqrew.getId()))) {
 
                     if (sqrew.getDepth() == null) {
-                        sqrew.setDepth(Double.parseDouble(request.getParameter("depth" + sqrew.getId())));
+                        sqrew.setDepth(toDouble(request.getParameter("depth" + sqrew.getId())));
                      saveKey = true;
-                    } else if (Double.parseDouble(request.getParameter("depth" + sqrew.getId())) != sqrew.getDepth()) {
-                        sqrew.setDepth(Double.parseDouble(request.getParameter("depth" + sqrew.getId())));
+                    } else if (toDouble(request.getParameter("depth" + sqrew.getId())) != sqrew.getDepth()) {
+                        sqrew.setDepth(toDouble(request.getParameter("depth" + sqrew.getId())));
                         saveKey = true;
                     }
                 }
@@ -283,13 +297,13 @@ public class SqrewService {
 
             if (Strings.isNotBlank(request.getParameter("sqrew_classSqrew_new"))) {
 
-                classSqrew = Double.parseDouble(request.getParameter("sqrew_classSqrew_new"));
+                classSqrew = toDouble(request.getParameter("sqrew_classSqrew_new"));
             }
 
 
             if (Strings.isNotBlank(request.getParameter("sqrew_depth_new"))) {
 
-                depth = Double.parseDouble(request.getParameter("sqrew_depth_new"));
+                depth = toDouble(request.getParameter("sqrew_depth_new"));
             }
 
             if (Strings.isNotBlank(request.getParameter("sqrew.comment_new"))) {

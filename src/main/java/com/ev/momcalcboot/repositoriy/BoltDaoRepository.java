@@ -4,6 +4,9 @@ import com.ev.momcalcboot.Entity.BoltEntity;
 import com.ev.momcalcboot.controller.ControllerError;
 import com.ev.momcalcboot.exceptions.FormatException;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -34,6 +37,22 @@ public class BoltDaoRepository {
     public List<BoltEntity> getBoltByUserId(int id){
 
         return boltRepository.findBoltsByUserId(id) ;
+
+    }
+
+
+    /**
+     * Получение болтов с пагинацией
+     * @param id
+     * @param page - страница
+     * @param size - кол-во элементов на старнице
+     * @return
+     */
+    public List<BoltEntity> getBoltByUserIdPage(int id, int page, int size){
+
+        return boltRepository.findBoltsByUserId(id, PageRequest.of(1, 2)).getContent();
+
+
     }
 
     public void saveBolt(BoltEntity bolt){
@@ -41,7 +60,7 @@ public class BoltDaoRepository {
       boltRepository.save(bolt);
         }
 
-@Transactional()
+@Transactional(rollbackFor = RuntimeException.class)
         public boolean deleteBolt(int boltId){
 
         boolean result = false;
@@ -68,7 +87,9 @@ public class BoltDaoRepository {
         }
 
         public List<BoltEntity> getAllBolts(){
-        return boltRepository.findAll();
+
+        Page page = boltRepository.findAll(PageRequest.of(0, 3));
+        return page.getContent();
 
         }
 }

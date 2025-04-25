@@ -46,7 +46,7 @@
         <div class="col-7">
             <form action = "/all_sqrew" method = "POST">
 
-                <!-- Таблица болты пользователь               -->
+                <!-- Таблица sqrew пользователь               -->
 
                 <table class="table table-bordered">
                     <thead>
@@ -101,7 +101,7 @@
                             </th>
 
                             <th>
-                                <h6> <a th:text="${sqrew.getDataCreate()}">  </a> </h6>
+                                <p class="fs-6" th:text="${sqrew.getDataCreatePars()}">nm,  </p>
                             </th>
                             <th>
                                 <a th:href = "@{/all_sqrew/{id}(id = ${sqrew.getId()})}" >   <h8>удалить</h8>  </a>
@@ -141,7 +141,7 @@
 
             </form>
             <p></p>
-            <form action = "/moment_page_1" method = "get">
+            <form action = "/" method = "get">
 
                 <div class="d-grid gap-2 d-md-block">
                     <button class="btn btn-dark" id="submit2" type="submit"> На главную </button>
@@ -157,7 +157,7 @@
                 <tr class="table-warning table align-middle">
 
                     <th>
-                        <h6> Болт</h6>
+                        <h6> Гайка </h6>
                     </th>
                     <th>
                         <h6> Предел текучести, МПа</h6>

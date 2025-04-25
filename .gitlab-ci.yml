@@ -1,0 +1,66 @@
+image: maven:3-openjdk-17  # Образ майвен и JDK для использования runner-ом (сборка проекта в jar файл на
+# сервере гит)
+
+variables:                 # переменные для использования внутри ci
+  APP_NAME: moment-calc-0.1.0    # имя проекта
+  TARGET_JAR: target/${APP_NAME}.jar   # расположение собранного проекта (в контейнере docker при сборке на сервере GIT)
+  # после работы пайплайна контейнер будет удален
+
+stages:                    # порядок выполнения этапов
+  - build                  # имена этапов
+  #- test          # тестирование
+  - deploy
+
+
+build_job:                 # Сборка.
+  stage: build             # этап (первый)
+  script:                  # скрипт для выполнения задачи
+    - mvn clean package -Dmaven.test.skip=true    # команды мавен очистка и упаковка
+  artifacts:               # артефакты для сохранения работы ранера для следующих этапов пайплайна
+    paths:
+      - ${TARGET_JAR}      # jar файл будет доступен на следующих этапах
+
+
+#deploy_job:                 # Сборка.
+#  stage: deploy             # этап (первый)
+##  only:
+##    - master
+#  script:                  # скрипт для выполнения задачи
+#    - mkdir -p ~/.ssh #&& chmod 700 ~/.ssh
+##    - $ echo "$PRIVATE_SSH_KEY" | grep '^-----BEGIN PRIVATE KEY-----.*$' > /dev/null || echo "Ошибка: Неверный формат приватного ключа."
+##    - echo "$PUBLIC_SSH_KEY" > ~/.ssh/id_ed25519.pub
+#    - echo "$PRIVATE_SSH_KEY" > ~/.ssh/id_ed25519
+#    - chmod 600 ~/.ssh/id_ed25519
+#    - echo "$PRIVATE_SSH_KEY" | grep '^-----BEGIN PRIVATE KEY-----.*$' > /dev/null || echo "Ошибка: Неверный формат приватного ключа."
+#    - ssh-keyscan -H 45.131.42.166 >> ~/.ssh/known_hosts
+#    - scp ${CI_PROJECT_DIR}/${TARGET_JAR} root@45.131.42.166:/tmp/${APP_NAME}.jar
+##    - ssh root@45.131.42.166 << EOF                   # подключение к серверу
+##      mkdir -p /opt/apps/${APP_NAME}/current           # создание новой папки /opt/apps/${APP_NAME}/current на сервере
+##      mv /tmp/${APP_NAME}.jar /opt/apps/${APP_NAME}/current/  # перемещение файла из /tmp в /opt/apps/${APP_NAME}/current/
+##      EOF
+
+deploy_job:
+  stage: deploy
+  script:
+    - docker compose up -d
+
+
+#deploy_job:
+#  stage: deploy            # этап деплоинга
+#  only:
+#    - master               # будет работать только для изменений в ветке мастер
+#  script:
+#    - mkdir -p ~/.ssh && chmod 700 ~/.ssh              # создание папки .ssh и установка прав доступа 700 к папке
+#    - echo "$PRIVATE_SSH_KEY" > ~/.ssh/id_ed25519     # копирование содержания (>) ключа PRIVATE_SSH_KEY из хранилища в папку ssh/id_ed25519
+#    - chmod 600 ~/.ssh/id_ed25519                     # установка прав доступа 600 к ключу
+#
+#    # копирование файла ${TARGET_JAR} из корневой директории ранера во временную папку temp на сервер
+#    - scp ${CI_PROJECT_DIR}/${TARGET_JAR} root@45.131.42.166:/tmp/${APP_NAME}.jar
+#
+#    - ssh root@45.131.42.166 << EOF                   # подключение к серверу
+#      mkdir -p /opt/apps/${APP_NAME}/current           # создание новой папки /opt/apps/${APP_NAME}/current на сервере
+#      mv /tmp/${APP_NAME}.jar /opt/apps/${APP_NAME}/current/  # перемещение файла из /tmp в /opt/apps/${APP_NAME}/current/
+#      EOF
+
+
+

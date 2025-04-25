@@ -21,12 +21,12 @@
 <div class="container">
     <div class="row">
         <!--Первая колонка        -->
-        <div class="col-5">
+        <div class="col-4">
 
             <a href = "/user_registrationEnter" > <p th:text=" ${userName} "> </p> </a>
             <p></p>
 
-            <form method="get" action = "/moment_page_1"  >
+            <form method="get" action = "/"  >
                 <p>
                     <label for="thread">Резьба:</label>
                         <!-- name="threadId" - параметр в get запросе - выбор резьбы                   -->
@@ -58,7 +58,7 @@
 
                 </p>
                <p></p>
-<!--            Имя резьбы-->
+<!--       Имя резьбы-->
             <div>
                 <h3>  <a th:text="'Резьба' + ${thread}" > </a>   </h3>
             </div>
@@ -144,7 +144,6 @@
 
             </form>
 
-
                     <script>
                         const bolt = document.getElementById("boltSelect");
                         const seletctBolt = document.getElementById(bolt.getAttribute("value"));
@@ -157,7 +156,7 @@
                     </script>
 
                     <p></p>
-                    < !--таблица вычисленных параметров                -->
+                    <!-- таблица вычисленных параметров                -->
 
                     <table class="table table-bordered">
 
@@ -167,7 +166,7 @@
                         <tr class="table-danger table align-middle">
                             <th> Момент затяжки </th>
                             <th> Усилие затяжки </th>
-                            <th> Напряжение в резьбе (среднее) </th>
+                            <th> Напряжение на 1-ом витке </th>
                             <th> Напряжение в стержне болта </th>
 
                         </tr>
@@ -175,22 +174,64 @@
                         <tr class="table-warning table align-middle">
                             <th> <a th:text = "${momentForBoltSqrew_Nm} + ' Нм'" > </a> </th>
                             <th> <a th:text = "${powerMaxBoltSqrew_kgs} + ' кгс'" > </a> </th>
-                            <th> <a th:text = "${stregthInThread_MPa} + ' МПа'" > </a> </th>
+<!--                            <th> <a th:text = "${stregthInThread_MPa} + ' МПа'" > </a> </th>-->
+                            <th> <a th:text = "${strengthInOneTurn}" > </a> </th>
+
                             <th> <a th:text = "${stregthInBoltRot_MPa} + ' МПа'" > </a> </th>
                         </tr >
                         </tbody>
                     </table>
                     <p></p>
+<!-- напряжения по виткам -->
 
+            <h6> <a th:text = "'Высота гайки - ' + ${hSqrew} + ' мм'" > </a>   </h6>
+            <p></p>
+
+            <h8> <a th:text = "'Напряжение на витках резьбы (pабочих витков - ' + ${countWorkTurn} + ')'" > </a>   </h8>
+            <p></p>
+            <div th:each = "turn: ${strengthInTurn}" >
+
+                   <h10>  <a th:text = "${turn}" > </a> </h10>
+            </div>
+            <p></p>
+            <h8> * Распределение нагрузки по виткам резьбы согласно расчетам Н.Е. Жуковского</h8>
+<!--            расчет сил -->
+            <p></p>
+            <h6> Усилие затяжки F выбирается как максимально допустимое по одному из условий:
+                <p></p>
+                - прочности стержня болта (F болт);
+                <p></p>
+                <img src="image/F_bolt.JPG" class="w-75 img-fluid" alt="">
+                <P></P>
+                - прочности 1-го витка резьбы болта (F 1-болт);
+                <p></p>
+                - прочности 1-го витка гайки (F 1-гайка);
+                <p></p>
+                <p></p>
+                <img src="image/F1_turn.JPG" class="w-75 img-fluid" alt="">
+                <p></p>
+<!--                Вывод и проверка расчитанных сил по условиям прочности, проверка по условию если сила равна миним., то красная-->
+                <div th:classappend="${listMaxPower.get(1) == listMaxPower.get(0) ? 'text-danger'  : 'text-success'}">
+                    <h8   th:text = "'F bolt =  ' + ${listMaxPower.get(1)} + ' Н'"> </h8>
+                    <P></P>
+                </div>
+                <div th:classappend="${listMaxPower.get(2) == listMaxPower.get(0) ? 'text-danger'  : 'text-success'}">
+                    <h8 th:text = "'F 1-bolt =  ' + ${listMaxPower.get(2)} + ' Н'">>   </h8>
+                    <p></p>
+                </div>
+                <div th:classappend="${listMaxPower.get(3) == listMaxPower.get(0) ? 'text-danger'  : 'text-success'}">
+                    <h8 th:text = "'F 1-sqrew =  ' + ${listMaxPower.get(3)} + ' Н'"> >  </h8>
+                    <p></p>
+                </div>
+
+                На основании трех вычисленных сил выбирается наименьшая для расчета момента затяжки</h6>
+            <P></P>
             <ul>
                 <a href="/moment_parametr">Расчет момента по параметрам</a>
 <!--                <a href="#news">News</a>-->
 <!--                <a href="#contact">Contact</a>-->
 <!--                <li><a href="#about">About</a></li>-->
             </ul>
-
-
-
 
     </div>
 
@@ -243,7 +284,7 @@
             <label for="diametrHole_mm">диаметр отв., мм </label>
             <p></p>
 
-            <form method="get" action = "/moment_page_1">
+            <form method="get" action = "/">
 
                 <!-- вспомогательная переменная и сохранение выбора в селект болта и гайки
                 при возвращении параметров по умолчанию-->
@@ -261,63 +302,82 @@
 
                     <p></p>
     </div>
-</div>
-<script>
 
-    const param_1 = document.getElementById("stepThread_mm");
-    const param_2 = document.getElementById("middleDiamThread_mm");
-    const param_3 = document.getElementById("k_threadDepth");
-    const param_4 = document.getElementById("safetyFactor");
-    const param_5 = document.getElementById("coefficientOfFrictionThread");
-    const param_6 = document.getElementById("coefficientOfFrictionBoltHead");
-    const param_7 = document.getElementById("diametrHead_mm");
-    const param_8 = document.getElementById("diametrHole_mm");
+        <!-- третья колонка -->
+        <div class="col">
+            <p></p>
 
-    // <input type="hidden"  id="stepThread_mm_hidden" name="stepThread_mm" value="NO" />
-    // <input type="hidden"  id="middleDiamThread_mm_hidden" name="middleDiamThread_mm" value="NO" />
-    // <input type="hidden"  id="k_threadDepth_hidden" name="k_threadDepth" value="NO" />
-    // <input type="hidden"  id="safetyFactor_hidden" name="safetyFactor" value="NO" />
-    // <input type="hidden"  id="coefficientOfFrictionThread_hidden" name="coefficientOfFrictionThread" value="NO" />
-    // <input type="hidden"  id="coefficientOfFrictionBoltHead_hidden" name="coefficientOfFrictionBoltHead" value="NO" />
-    // <input type="hidden"  id="diametrHead_mm_hidden" name="diametrHead_mm" value="NO" />
-    // <input type="hidden"  id="diametrHole_mm_hidden" name="diametrHole_mm" value="NO" />
+            <img src="image/vint_image.JPG" class="img-fluid" alt="Винтовое болтовое соединение гайкой, в тело детали, размеры параметры, расчет момента затяжки">
+            <p></p>
+            <h6> Уравнение Каллермана - Кляйна (расчет момета затяжки M по заданному усилию F)</h6>
+            <p></p>
+            <img src="image/f_Kallerman.JPG" class="img-fluid" alt="формула Каллермана Кляйна расчет момента затяжки винтового болтового соединения
+по заданному усилию ">
+            <p></p>
 
-    // document.getElementById("apply").onclick = apply;
+            <p></p>
+            <img src="image/note.JPG" class=" w-75 img-fluid" alt="описание значений">
 
-    param_1.addEventListener("input", compareParam_1); // слушатель param_1
-    param_2.addEventListener("input", compareParam_1); // слушатель param_1
-    param_3.addEventListener("input", compareParam_1); // слушатель param_1
-    param_4.addEventListener("input", compareParam_1); // слушатель param_1
-    param_5.addEventListener("input", compareParam_1); // слушатель param_1
-    param_6.addEventListener("input", compareParam_1); // слушатель param_1
-    param_7.addEventListener("input", compareParam_1); // слушатель param_1
-    param_8.addEventListener("input", compareParam_1); // слушатель param_1
+        </div>
 
-    document.getElementById("stepThread_mm_hidden").setAttribute("value", param_1.getAttribute("value"));
-   document.getElementById("middleDiamThread_mm_hidden").setAttribute("value", param_2.getAttribute("value"));
-    document.getElementById("k_threadDepth_hidden").setAttribute("value", param_3.getAttribute("value"));
-    document.getElementById("safetyFactor_hidden").setAttribute("value", param_4.getAttribute("value"));
-   document.getElementById("coefficientOfFrictionThread_hidden").setAttribute("value", param_5.getAttribute("value"));
-    document.getElementById("coefficientOfFrictionBoltHead_hidden").setAttribute("value", param_6.getAttribute("value"));
-    document.getElementById("diametrHead_mm_hidden").setAttribute("value", param_7.getAttribute("value"));
-    document.getElementById("diametrHole_mm_hidden").setAttribute("value", param_8.getAttribute("value"));
+<!--      нижняя строка-->
+        <div class="row">
 
-    function compareParam_1(e){
-        // const stepThread_mm_hidden = document.getElementById("stepThread_mm_hidden");  -  вернуть при необ.// получение скрытого поля
-        // param_1.setAttribute("class", "btn btn-warning"); // изменение параметра
-        const val = e.target.value; // получение значения value от класса который вызвал
-        e.target.setAttribute("class", "btn btn-warning");
+        </div>
+    </div>
 
-        const formInput = document.getElementsByName(e.target.id).item(0); // получение элемента скрытого поля по имени
-        formInput.setAttribute("value", val)
-         // stepThread_mm_hidden.setAttribute("value", val); // -  вернуть при необ.
-    }
+    <script>
 
-</script>
+        const param_1 = document.getElementById("stepThread_mm");
+        const param_2 = document.getElementById("middleDiamThread_mm");
+        const param_3 = document.getElementById("k_threadDepth");
+        const param_4 = document.getElementById("safetyFactor");
+        const param_5 = document.getElementById("coefficientOfFrictionThread");
+        const param_6 = document.getElementById("coefficientOfFrictionBoltHead");
+        const param_7 = document.getElementById("diametrHead_mm");
+        const param_8 = document.getElementById("diametrHole_mm");
 
-<div class="row">
-</div>
+        // <input type="hidden"  id="stepThread_mm_hidden" name="stepThread_mm" value="NO" />
+        // <input type="hidden"  id="middleDiamThread_mm_hidden" name="middleDiamThread_mm" value="NO" />
+        // <input type="hidden"  id="k_threadDepth_hidden" name="k_threadDepth" value="NO" />
+        // <input type="hidden"  id="safetyFactor_hidden" name="safetyFactor" value="NO" />
+        // <input type="hidden"  id="coefficientOfFrictionThread_hidden" name="coefficientOfFrictionThread" value="NO" />
+        // <input type="hidden"  id="coefficientOfFrictionBoltHead_hidden" name="coefficientOfFrictionBoltHead" value="NO" />
+        // <input type="hidden"  id="diametrHead_mm_hidden" name="diametrHead_mm" value="NO" />
+        // <input type="hidden"  id="diametrHole_mm_hidden" name="diametrHole_mm" value="NO" />
 
+        // document.getElementById("apply").onclick = apply;
+
+        param_1.addEventListener("input", compareParam_1); // слушатель param_1
+        param_2.addEventListener("input", compareParam_1); // слушатель param_1
+        param_3.addEventListener("input", compareParam_1); // слушатель param_1
+        param_4.addEventListener("input", compareParam_1); // слушатель param_1
+        param_5.addEventListener("input", compareParam_1); // слушатель param_1
+        param_6.addEventListener("input", compareParam_1); // слушатель param_1
+        param_7.addEventListener("input", compareParam_1); // слушатель param_1
+        param_8.addEventListener("input", compareParam_1); // слушатель param_1
+
+        document.getElementById("stepThread_mm_hidden").setAttribute("value", param_1.getAttribute("value"));
+        document.getElementById("middleDiamThread_mm_hidden").setAttribute("value", param_2.getAttribute("value"));
+        document.getElementById("k_threadDepth_hidden").setAttribute("value", param_3.getAttribute("value"));
+        document.getElementById("safetyFactor_hidden").setAttribute("value", param_4.getAttribute("value"));
+        document.getElementById("coefficientOfFrictionThread_hidden").setAttribute("value", param_5.getAttribute("value"));
+        document.getElementById("coefficientOfFrictionBoltHead_hidden").setAttribute("value", param_6.getAttribute("value"));
+        document.getElementById("diametrHead_mm_hidden").setAttribute("value", param_7.getAttribute("value"));
+        document.getElementById("diametrHole_mm_hidden").setAttribute("value", param_8.getAttribute("value"));
+
+        function compareParam_1(e){
+            // const stepThread_mm_hidden = document.getElementById("stepThread_mm_hidden");  -  вернуть при необ.// получение скрытого поля
+            // param_1.setAttribute("class", "btn btn-warning"); // изменение параметра
+            const val = e.target.value; // получение значения value от класса который вызвал
+            e.target.setAttribute("class", "btn btn-warning");
+
+            const formInput = document.getElementsByName(e.target.id).item(0); // получение элемента скрытого поля по имени
+            formInput.setAttribute("value", val)
+            // stepThread_mm_hidden.setAttribute("value", val); // -  вернуть при необ.
+        }
+
+    </script>
 <!--    <div class="row">-->
 
 <!--        <div class="col">col</div>-->
