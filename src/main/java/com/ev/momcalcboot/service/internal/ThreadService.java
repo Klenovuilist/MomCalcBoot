@@ -13,41 +13,10 @@ import static com.ev.momcalcboot.service.internal.ParserNumber.toInt;
 
 @Service
 public class ThreadService {
-
     /**
-     * ��������� ������ �� ����� �� ����������  � ������� �������������
+     * Получение текущих значений резьбы из формы или занчений по умолчанию если не были переопределены
      */
-//    public ThreadEntity getThreadByRequestParam(HttpServletRequest request, ThreadEntity currentThread){
-//
-//        ThreadEntity thread = new ThreadEntity();
-//
-//        return ThreadEntity.builder().
-//                StepThread_mm((Objects.nonNull((request.getParameter("stepThread_mm")))) ?
-//                        Double.parseDouble((request.getParameter("stepThread_mm"))) :
-//                        currentThread.getStepThread_mm()).
-//                dBolt_mm(Objects.nonNull(request.getParameter("diametrThread_mm")) ?
-//                        Double.parseDouble(request.getParameter("diametrThread_mm")) :
-//                        currentThread.getDBolt_mm()).
-//                thread(Objects.nonNull(request.getParameter("thread")) ?
-//                        (request.getParameter("thread")) :
-//                        currentThread.getThread()).
-//                dHead_mm(Objects.nonNull(request.getParameter("diametrHead_mm")) ?
-//                        Double.parseDouble(request.getParameter("diametrHead_mm")) :
-//                        currentThread.getDHead_mm()).
-//                dhole_mm(Objects.nonNull(request.getParameter("diametrHole_mm")) ?
-//                        Double.parseDouble(request.getParameter("diametrHole_mm")) :
-//                        currentThread.getDhole_mm()).
-//                dMidlethread_mm(Objects.nonNull(request.getParameter("middleDiamThread_mm")) ?
-//                        Double.parseDouble(request.getParameter("middleDiamThread_mm")) :
-//                        currentThread.getDMidlethread_mm()).
-//                id(currentThread.getId()).
-//                build();
-//
-//    }
-
     public ThreadEntity getThreadByRequestParam(Map<String, String> paramFromForm, ThreadEntity currentThread){
-
-        ThreadEntity thread = new ThreadEntity();
 
         return ThreadEntity.builder().
                 StepThread_mm((Objects.nonNull((paramFromForm.get("stepThread_mm")))) ?
@@ -75,8 +44,6 @@ public class ThreadService {
                         currentThread.getDMidlethread_mm()).
                 id(currentThread.getId()).
                 build();
-
     }
-
 
 }

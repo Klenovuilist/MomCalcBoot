@@ -18,7 +18,6 @@ public class ThreadDtoService {
 
         List<ThreadDTO> threadDTOList = new ArrayList<>();
 
-
         threadDao.getThread().forEach(threadEntity -> {
 
             List<String> paramThread = new ArrayList<>();

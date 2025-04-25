@@ -24,14 +24,9 @@ import static com.ev.momcalcboot.service.internal.ParserNumber.toDouble;
 public class MomentService {
 
     public final MaterialService materialService;
-
     public  final BoltService boltService;
-
     private final SqrewService sqrewService;
-
     private final ThreadService threadService;
-
-
    private final double Km = 0.6; //коэфф. неравномерности нагрузки на резьбу
 
    private final double K = 0.87;  //коэфф. колноты резьбы

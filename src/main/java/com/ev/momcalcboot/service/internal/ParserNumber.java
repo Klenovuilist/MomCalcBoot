@@ -2,6 +2,9 @@ package com.ev.momcalcboot.service.internal;
 
 import java.util.regex.Pattern;
 
+/**
+ * Парсер строк в числа при вводе в форму HTML (учет , . / лишних символов)
+ */
 public class ParserNumber {
 
     public static double toDouble(String str){
@@ -52,8 +55,6 @@ public class ParserNumber {
 
         char[] arrChar = str.toCharArray();
 
-
-
         for (char ch :arrChar){
 
             if (firstNumberNull && ch =='0'){
@@ -69,8 +70,7 @@ public class ParserNumber {
                 break;
             }
         }
-        //        если строка начинается с цифры коме 0 то вернуть и парсить
-
+        //        если строка начинается с цифры кроме 0 то вернуть и парсить
         if(Pattern.matches("[1-9]", Character.toString(builder.charAt(0)))){
             return Integer.parseInt(builder.toString());
         }

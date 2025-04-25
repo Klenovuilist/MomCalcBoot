@@ -31,19 +31,19 @@ import java.util.List;
 
 public class ControllerAdmin {
 
-private final UserDtoService userDtoService;
+    private final UserDtoService userDtoService;
 
-private final MaterialDtoService materialDtoService;
+    private final MaterialDtoService materialDtoService;
 
-private final AdminService adminService;
+    private final AdminService adminService;
 
-private final MaterialsDao materialsDao;
+    private final MaterialsDao materialsDao;
 
-private  final MomentsDao momentsDao;
+    private final MomentsDao momentsDao;
 
 
     @GetMapping("/admin")
-    public String adminPage(Model model){
+    public String adminPage(Model model) {
 
         List<UserDto> allUsersDto = userDtoService.getAllUserDto();
 
@@ -56,37 +56,34 @@ private  final MomentsDao momentsDao;
                 .build();
 
         model.addAttribute("userIndex0", userEntity);
-
         model.addAttribute("allUsers", allUsersDto);
-
 
         return "adminPage.html";
 
     }
+
     @GetMapping("/user/{userId}")
-    public String userDetail(@PathVariable("userId") int userId, Model model){
+    public String userDetail(@PathVariable("userId") int userId, Model model) {
 
         UserDto userDto = userDtoService.getUserDtoByIdWithMaterial(userId);
-
-//        List< MateralsDto> materalsDto = materialDtoService.getMaterialDtoByUserId(id);
 
         List<BoltEntity> bolts = adminService.getBoltByUserId(userId);
         List<SqrewEntity> sqrews = adminService.getSqrewByUserId(userId);
 
 
         model.addAttribute("userDto", userDto);
-
         model.addAttribute("bolts", bolts);
-
         model.addAttribute("sqrews", sqrews);
+
         return "user_info.html";
     }
+
     @PostMapping("/user_save_changes")
-    public String saveUserChangeAdmin(HttpServletRequest request){
+    public String saveUserChangeAdmin(HttpServletRequest request) {
 
-       adminService.saveMaterialRequestAdmin(request, Integer.parseInt(request.getParameter("userId")));
+        adminService.saveMaterialRequestAdmin(request, Integer.parseInt(request.getParameter("userId")));
 
-       adminService.saveUserRequestAdmin(request, Integer.parseInt(request.getParameter("userId")));
+        adminService.saveUserRequestAdmin(request, Integer.parseInt(request.getParameter("userId")));
 
         return "redirect:/admin";
 
@@ -96,59 +93,50 @@ private  final MomentsDao momentsDao;
      * Удаление материала по id
      */
     @GetMapping("material_delete/{id}")
-    public String materialDeleteAdmin(@PathVariable("id") int id){
+    public String materialDeleteAdmin(@PathVariable("id") int id) {
 
         List<MomentsEntity> moments_entities = momentsDao.momentsByIdMaterial(id);
 
-        for (MomentsEntity moment: moments_entities){
+        for (MomentsEntity moment : moments_entities) {
 
             momentsDao.momentRemove(moment);
         }
 
         MaterialsEntity materals_entity = materialsDao.getMaterialsById(id);
-
         materals_entity.getMomentsEntity().clear();
-
         materialsDao.materialRemove(materals_entity);
-
 
         return "redirect:/user_info.html";
     }
 
-        @GetMapping("/bolt_delete/{id}/{userId}")
-        public String deleteBoltById(@PathVariable("id") int boltId, @PathVariable("userId") int userId, Model model ){
+    /**
+     * Удаление болта по id и по User id
+     */
+    @GetMapping("/bolt_delete/{id}/{userId}")
+    public String deleteBoltById(@PathVariable("id") int boltId, @PathVariable("userId") int userId, Model model) {
         try {
-//            int userId = Integer.parseInt(request.getParameter("userId"));
             adminService.deleteBoltById(boltId);
 
             return "redirect:/user/" + userId;
-        }
-
-        catch (FormatException f){
+        } catch (FormatException f) {
             model.addAttribute("error", f.getMessage());
-                return "error_page.html";
+            return "error_page.html";
         }
-            }
+    }
 
     /**
-     *
-     * @param id
-     * @param userId
-     * @param model
-     * @return
      * Удалить материал по юзер id и id материала
      */
     @GetMapping("/sqrew_delete/{id}/{userId}")
-    public String deleteSqrewById(@PathVariable("id") int id, @PathVariable("userId") int userId, Model model){
+    public String deleteSqrewById(@PathVariable("id") int id, @PathVariable("userId") int userId, Model model) {
         try {
             adminService.deleteSqrewById(id);
             return "redirect:/user/" + userId;
-        }
-        catch (FormatException f){
+        } catch (FormatException f) {
 
             model.addAttribute("error", f.getMessage());
             return "error_page.html";
         }
-        }
+    }
 
 }

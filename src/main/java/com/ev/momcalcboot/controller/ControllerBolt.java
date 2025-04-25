@@ -37,10 +37,10 @@ public class ControllerBolt {
     private final CookService cookService;
 
 
-    private  List<BoltEntity> boltListTemp;
+    private List<BoltEntity> boltListTemp;
 
     @GetMapping("/all_bolt")
-    public String viewAllBolt(Model model, HttpServletRequest request){
+    public String viewAllBolt(Model model, HttpServletRequest request) {
         log.info("Открытие страницы с болтами");
 
         /**
@@ -49,17 +49,15 @@ public class ControllerBolt {
 
         Cookie cookieUserId = cookService.findCookByName(request, CookiesParametr.USERID.getParam());
         // если пользователь не получен - вернуть на регистрацию
-        if (Objects.isNull(cookieUserId))
-        {
+        if (Objects.isNull(cookieUserId)) {
             return "redirect:/user_registration";
         }
 
-         Integer userId = Integer.parseInt(cookieUserId.getValue());
+        Integer userId = Integer.parseInt(cookieUserId.getValue());
         model.addAttribute("user", userDaoRepository.getUserById(userId));
 
         Cookie cookieUserName = cookService.findCookByName(request, CookiesParametr.USERNAME.getParam());
         String userName = cookieUserName.getValue();
-
 
         log.info("Получен пользователь из куков id = {}, имя: {}", userId, userName);
 
@@ -75,35 +73,40 @@ public class ControllerBolt {
         boltListTemp.addAll(boltService.getBoltByUserId(userId));
         model.addAttribute("boltsUser", boltListTemp);
 
-     return "all_bolt.html";
- }
+        return "all_bolt.html";
+    }
 
-        @PostMapping("/all_bolt")
-        public String saveChangeBolt(HttpServletRequest request){
+    /**
+     * Сохранение всех значений болтов по данным из формы
+     */
+    @PostMapping("/all_bolt")
+    public String saveChangeBolt(HttpServletRequest request) {
 
-            Integer userId = Integer.parseInt(cookService.findCookByName(request, CookiesParametr.USERID.getParam()).getValue());
+        Integer userId = Integer.parseInt(cookService.findCookByName(request, CookiesParametr.USERID.getParam()).getValue());
 
-            boltService.saveBoltsByParametrForm(request, boltListTemp, userId);
+        boltService.saveBoltsByParametrForm(request, boltListTemp, userId);
+        boltService.saveNewBolt(userId, request);
 
-            boltService.saveNewBolt(userId, request);
+        return "redirect:/all_bolt";
+    }
 
-            return "redirect:/all_bolt";
+    /**
+     * Удаление болтов по id
+     */
+    @GetMapping("/all_bolt/{id}")
+    public String deleteBolt(@PathVariable("id") int boltId, Model model) {
+
+        try {
+            boltService.deletebolt(boltId);
+            log.info("Удален болт id = {}", boltId);
+        } catch (FormatException formatException) {
+            model.addAttribute("error", formatException.getMessage());
+            log.error("Ошибка при удалении болта id = {}", boltId);
+
+            return "error_page.html";
         }
-
-        @GetMapping("/all_bolt/{id}")
-        public String deleteBolt(@PathVariable("id") int boltId, Model model){
-
-       try {
-           boltService.deletebolt(boltId);
-       }
-       catch (FormatException formatException){
-           model.addAttribute("error", formatException.getMessage());
-           log.error("Ошибка при удалении болта id = {}", boltId);
-
-           return "error_page.html";
-       }
 
         return "redirect:/all_bolt";
 
-        }
+    }
 }

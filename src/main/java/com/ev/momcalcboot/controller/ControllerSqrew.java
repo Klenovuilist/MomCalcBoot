@@ -31,23 +31,21 @@ public class ControllerSqrew {
     @Autowired
     private final CookService cookService;
 
-
-    private  List<SqrewEntity> sqrewListTemp;
+    private List<SqrewEntity> sqrewListTemp;
 
     @GetMapping("/all_sqrew")
-    public String viewAllSqrew(Model model, HttpServletRequest request){
+    public String viewAllSqrew(Model model, HttpServletRequest request) {
 
         /**
          * получение id польз. из куков
          */
         Cookie cookieUserId = cookService.findCookByName(request, CookiesParametr.USERID.getParam());
         // если пользователь не получен - вернуть на регистрацию
-        if (Objects.isNull(cookieUserId))
-        {
+        if (Objects.isNull(cookieUserId)) {
             return "redirect:/user_registration";
         }
 
-         Integer userId = Integer.parseInt(cookService.findCookByName(request, CookiesParametr.USERID.getParam()).getValue());
+        Integer userId = Integer.parseInt(cookService.findCookByName(request, CookiesParametr.USERID.getParam()).getValue());
         model.addAttribute("user", userDaoRepository.getUserById(userId));
 
         /**
@@ -62,27 +60,27 @@ public class ControllerSqrew {
         sqrewListTemp.addAll(sqrewService.getSqrewsByUserId(userId));
         model.addAttribute("sqrewsUser", sqrewListTemp);
 
-     return "all_sqrew.html";
- }
+        return "all_sqrew.html";
+    }
 
-        @PostMapping("/all_sqrew")
-        public String saveChangeSqrew(HttpServletRequest request){
+    @PostMapping("/all_sqrew")
+    public String saveChangeSqrew(HttpServletRequest request) {
 
-            Integer userId = Integer.parseInt(cookService.findCookByName(request, CookiesParametr.USERID.getParam()).getValue());
+        Integer userId = Integer.parseInt(cookService.findCookByName(request, CookiesParametr.USERID.getParam()).getValue());
 
-            sqrewService.saveSqrewsByParametrForm(request, sqrewListTemp, userId);
+        sqrewService.saveSqrewsByParametrForm(request, sqrewListTemp, userId);
 
-            sqrewService.saveNewSqrew(userId, request);
+        sqrewService.saveNewSqrew(userId, request);
 
-            return "redirect:/all_sqrew";
-        }
+        return "redirect:/all_sqrew";
+    }
 
-        @GetMapping("/all_sqrew/{id}")
-        public String deleteSqrew(@PathVariable("id") int sqrewId){
+    @GetMapping("/all_sqrew/{id}")
+    public String deleteSqrew(@PathVariable("id") int sqrewId) {
 
         sqrewService.deleteSqrew(sqrewId);
 
         return "redirect:/all_sqrew";
 
-        }
+    }
 }
