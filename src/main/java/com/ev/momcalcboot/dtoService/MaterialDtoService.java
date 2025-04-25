@@ -20,7 +20,6 @@ public class MaterialDtoService {
 
 private  final MaterialsDao materals_dao;
 
-//private  final Materals_db materals_db;
 
 public List<MateralsDto> getMaterialDtoByUserId(int id){
 

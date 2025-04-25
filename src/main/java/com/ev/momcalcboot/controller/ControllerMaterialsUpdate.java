@@ -27,7 +27,6 @@ import java.util.function.Predicate;
 public class ControllerMaterialsUpdate {
 
 
-
     @Autowired
     private ThreadDao threadDao;
 
@@ -40,8 +39,6 @@ public class ControllerMaterialsUpdate {
     @Autowired
     private MaterialService materialService;
 
-    @Autowired
-    private MomentService momentService;
 
     @Autowired
     private TempObjectService tempObjectService;
@@ -49,13 +46,8 @@ public class ControllerMaterialsUpdate {
     private ControllerService controllerService;
 
 
-
-
     @GetMapping("/materials_update/{id}")
-    public String update(Model model, HttpServletRequest request, @PathVariable("id") int id){
-
-//        tempObjectService.getTempMaterals_db().get(0);
-
+    public String update(Model model, HttpServletRequest request, @PathVariable("id") int id) {
 
         MaterialsEntity materalsEntity = materialsDao.getMaterialsById(id);
 
@@ -69,12 +61,12 @@ public class ControllerMaterialsUpdate {
          * Проверка наличия материала во временном списке, установка материала из временного списка,
          * обнуление временного списка
          */
-         if(! tempObjectService.getTempMaterals_entity().isEmpty()){
+        if (!tempObjectService.getTempMaterals_entity().isEmpty()) {
 
-             materalsEntity = tempObjectService.getTempMaterals_entity().get(0);
+            materalsEntity = tempObjectService.getTempMaterals_entity().get(0);
 
-             tempObjectService.removeTempListMaterial();
-         }
+            tempObjectService.removeTempListMaterial();
+        }
 
 
         /**
@@ -82,24 +74,21 @@ public class ControllerMaterialsUpdate {
          * обнуление временного списка
          */
 
-        if(! (tempObjectService.getTempListMoment().isEmpty())){
+        if (!(tempObjectService.getTempListMoment().isEmpty())) {
 
             List<MomentsEntity> momentsChange = new ArrayList<>();
             momentsChange.addAll(tempObjectService.getTempListMoment());
 
-            for (ThreadEntity thread_entity : threadEntities){
+            for (ThreadEntity thread_entity : threadEntities) {
                 Predicate<MomentsEntity> filterByThread = (moment) -> {
-                    System.out.println("predicate 9999999");
                     return moment.getThread().getThread().equals(thread_entity.getThread());
                 };
                 sortedMoment.add(momentsChange.stream().filter(filterByThread).findAny().orElse(null));
             }
             tempObjectService.removeTempListMoment();
-        }
-        else {
-            for (ThreadEntity thread_entity : threadEntities){
+        } else {
+            for (ThreadEntity thread_entity : threadEntities) {
                 Predicate<MomentsEntity> filterByThread = (moment) -> {
-                    System.out.println("predicate 9999999");
                     return moment.getThread().getThread().equals(thread_entity.getThread());
                 };
                 sortedMoment.add(momentsEntity.stream().filter(filterByThread).findAny().orElse(null));
@@ -113,24 +102,25 @@ public class ControllerMaterialsUpdate {
         return "update_material.html";
 
     }
+
     @PostMapping("/update/{id}")
     public String saveApdate(@PathVariable("id") int id
-            , HttpServletRequest request){
+            , HttpServletRequest request) {
 
 
         MaterialsEntity materal_dbForUpdate = materialsDao.getMaterialsById(id);   // материал по id из БД
 
         List<MomentsEntity> moments_entityForUpdate = materal_dbForUpdate.getMomentsEntity();  //моменты из материала
 
-
         List<ThreadEntity> thread_entities = threadDao.getThread(); //резьба из БД
 
         thread_entities.forEach(thread -> {
-           MomentsEntity momentForUpdate = moments_entityForUpdate.stream()
-                   .filter(moment -> moment.getThread().getThread().equals(thread.getThread())).findAny().orElse(null); // поиск момента по резьбе
+            MomentsEntity momentForUpdate = moments_entityForUpdate.stream()
+                    .filter(moment -> moment.getThread().getThread().equals(thread.getThread())).findAny().orElse(null); // поиск момента по резьбе
             momentForUpdate.setMomentsNm(Double.valueOf(request.getParameter(thread.getThread()))); // установка значений моментов из формы
             momentsDao.updateMoment(momentForUpdate); // сохранение момента
         });
+
         /**
          * получение материала из формы
          */
@@ -158,12 +148,11 @@ public class ControllerMaterialsUpdate {
 
         materialsDao.updateMaterial(materal_dbForUpdate);
 
-//        return "redirect:/moment_page_1";
         return "redirect:/materials_update/" + materal_dbForUpdate.getId();
     }
 
     @PostMapping("/update_calc")
-    public String materiakUpdateCalc(HttpServletRequest request){
+    public String materiakUpdateCalc(HttpServletRequest request) {
 
         int idMaterial = Integer.parseInt(request.getParameter("idMaterial"));
 
@@ -183,7 +172,6 @@ public class ControllerMaterialsUpdate {
         /**
          * Получение листа вычисленных моментов(по данныь материала из формы)
          */
-//        List<Moments_db> listMomentFromHTML = momentService.getListMomentByRequestParam(request, thread_dbs);
 
         List<MomentsEntity> momentsCalculate = new ArrayList<>(); //метод удален
 

@@ -20,7 +20,7 @@ public class ThreadDaoImpl implements ThreadDao {
     public ThreadDaoImpl(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
-@Transactional
+
     @Override
     public List<ThreadEntity> getThread() {
 

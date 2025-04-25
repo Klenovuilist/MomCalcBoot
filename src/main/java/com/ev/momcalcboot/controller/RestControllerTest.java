@@ -47,30 +47,26 @@ public class RestControllerTest {
 
         ArrayList<String> list = new ArrayList();
 
-
         return userDaoRepository.getAllUser();
 
     }
 
 
-
+    /**
+     * Проверка работоспособности приложения - загрузка тестовой страницы
+     * */
     @GetMapping("/{id}")
     public String testView(@PathVariable("id") int id){
-
-//        boltDaoRepository.getBoltById(1);
-//        List<BoltEntity> boltEntities = boltDaoRepository.getBoltByUserId(1);
-//        List<SqrewEntity> sqrewEntities = sqrewDaoRepository.getSqrewByUserId(2);
-
             return "test_page.html id = " + id;
     }
 
+    /**
+     * Проверка работы БД
+     */
     @GetMapping("/test")
     public UserEntity testQuery(){
-
         return testRepository.getUsersByIdTest(1);
-
     }
-
 
     }
 

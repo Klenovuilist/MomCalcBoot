@@ -60,7 +60,7 @@ public class MaterialCreateController {
         Cookie cookieUserName = cookService.findCookByName(request, CookiesParametr.USERNAME.getParam());
 
 
-        if(Objects.nonNull(cookieUserName)) {
+        if (Objects.nonNull(cookieUserName)) {
 
             model.addAttribute("userName", cookieUserName.getValue());
 
@@ -92,34 +92,26 @@ public class MaterialCreateController {
 
         if (Objects.nonNull(cookieUserId)) {
             UserEntity userEntity = userDao.getUserById(Integer.parseInt(cookieUserId.getValue()));
+
             /**
              * сохр.материала из формы (@ModelAttribute)
              */
-
-
-
             MaterialsEntity materialsEntity = materialService.getMaterialByRequestParam(controllerService.getParametrFromForm(request));
 
             materialsEntity.setUser(userEntity);
-
             materialsDao.save(materialsEntity);
-
             List<ThreadEntity> thread_entities = threadDao.getThread();
 
             /**
              * получение моментов из формы и сохранение
              */
-
             List<MomentsEntity> moments_entities = momentService.getListMomentByRequestParam(request, thread_entities);
 
 
-                for (MomentsEntity moment: moments_entities){
-
-                    moment.setMaterialsEntity(materialsEntity);
-
-                    momentsDao.saveAll(moment);
-                }
-
+            for (MomentsEntity moment : moments_entities) {
+                moment.setMaterialsEntity(materialsEntity);
+                momentsDao.saveAll(moment);
+            }
             return "redirect:/";
         }
         return "redirect:/user_registration";
@@ -148,21 +140,6 @@ public class MaterialCreateController {
 
         model.addAttribute("material", materialsEntity);
 
-
-
-
-//        Cookie materialNameCook = new Cookie("materialName",request.getParameter("material"));
-//        response.addCookie(materialNameCook);
-//        materialNameCook.setMaxAge(300000);
-//
-//        Cookie materialLimitCook = new Cookie("materialLimit",request.getParameter("limit"));
-//        response.addCookie(materialLimitCook);
-//        materialLimitCook.setMaxAge(300000);
-//
-//        Cookie materialClassCook = new Cookie("materialClass",request.getParameter("class"));
-//        materialClassCook.setMaxAge(300000);
-//        response.addCookie(materialNameCook);
-
         return "materials_create_auto.html";
     }
 
@@ -176,24 +153,22 @@ public class MaterialCreateController {
         model.addAttribute("userName", cookService.findCookByName(request, CookiesParametr.USERNAME.getParam()).getValue());
 
         MaterialsEntity materals_entity = new MaterialsEntity();
+
         /**
          * Проверка наличия материала во временном списке, установка материала из временного списка,
          * обнуление временного списка
          */
-        if(! tempObjectService.getTempMaterals_entity().isEmpty()){
+        if (!tempObjectService.getTempMaterals_entity().isEmpty()) {
 
             materals_entity = tempObjectService.getTempMaterals_entity().get(0);
 
             tempObjectService.removeTempListMaterial();
-        }
-        else{
+        } else {
             /**
              * Получение материала из формы HTML
              */
 
-
-          materals_entity = materialService.getMaterialByRequestParam(controllerService.getParametrFromForm(request));
-
+            materals_entity = materialService.getMaterialByRequestParam(controllerService.getParametrFromForm(request));
         }
 
         List<ThreadEntity> thread_entities = threadDao.getThread();
@@ -203,12 +178,12 @@ public class MaterialCreateController {
          * Проверка наличия моментов во временном списке, установка моментов из БД или времееного списка,
          * обнуление временного списка
          */
-        if(! (tempObjectService.getTempListMoment().isEmpty())){
+        if (!(tempObjectService.getTempListMoment().isEmpty())) {
 
             List<MomentsEntity> momentsChange = new ArrayList<>();
             momentsChange.addAll(tempObjectService.getTempListMoment());
 
-            for (ThreadEntity thread_entity : thread_entities){
+            for (ThreadEntity thread_entity : thread_entities) {
                 Predicate<MomentsEntity> filterByThread = (moment) -> {
 
                     return moment.getThread().getThread().equals(thread_entity.getThread());
@@ -216,14 +191,13 @@ public class MaterialCreateController {
                 sortedMoment.add(momentsChange.stream().filter(filterByThread).findAny().orElse(null));
             }
             tempObjectService.removeTempListMoment();
-        }
-        else {
+        } else {
             /**
              * Вычисление моментов по данным материала (из формы HTML)
              */
             List<MomentsEntity> momentsCalc_NM = new ArrayList<>(); // метод удален
 
-            for (ThreadEntity thread_entity : thread_entities){
+            for (ThreadEntity thread_entity : thread_entities) {
                 Predicate<MomentsEntity> filterByThread = (moment) -> {
 
                     return moment.getThread().getThread().equals(thread_entity.getThread());
@@ -231,60 +205,53 @@ public class MaterialCreateController {
                 sortedMoment.add(momentsCalc_NM.stream().filter(filterByThread).findAny().orElse(null));
             }
         }
-
         model.addAttribute("material", materals_entity);
-
         model.addAttribute("moments", sortedMoment);
 
-        return  "materials_create_calc.html";
-
-        }
+        return "materials_create_calc.html";
+    }
 
     /**
      * Сохранение созданного материала авто
      */
     @PostMapping("/materials_create_calc")
-        public String materialsCreateCalcSave(HttpServletRequest request){
+    public String materialsCreateCalcSave(HttpServletRequest request) {
 
         Cookie cookUserId = cookService.findCookByName(request, CookiesParametr.USERID.getParam());
 
-            if (Objects.nonNull(cookUserId) && Integer.parseInt(cookUserId.getValue()) != 0) {
-                int userId = Integer.parseInt(cookUserId.getValue());
+        if (Objects.nonNull(cookUserId) && Integer.parseInt(cookUserId.getValue()) != 0) {
+            int userId = Integer.parseInt(cookUserId.getValue());
 
-                UserEntity userEntity = userDao.getUserById(userId);
+            UserEntity userEntity = userDao.getUserById(userId);
+            List<ThreadEntity> thread_entities = threadDao.getThread();
+            List<MomentsEntity> moments_entities = new ArrayList<>();
 
-                List<ThreadEntity> thread_entities = threadDao.getThread();
+            for (ThreadEntity thread_entity : thread_entities) {
 
-                List<MomentsEntity> moments_entities = new ArrayList<>();
-
-                for (ThreadEntity thread_entity : thread_entities){
-
-                    moments_entities.add(MomentsEntity.builder()
-                            .momentsNm(Double.parseDouble(request.getParameter(thread_entity.getThread())))
-                            .thread(thread_entity)
-                            .build());
-                                    }
-                MaterialsEntity materals_entity = materialService.getMaterialByRequestParam(controllerService.getParametrFromForm(request));
-                materals_entity.setUser(userEntity);
-
-                materialsDao.save(materals_entity);
-
-                moments_entities.forEach(moment -> {
-                    moment.setMaterialsEntity(materals_entity);
-                    momentsDao.saveAll(moment);
-                });
-
-                return "redirect:/material_select";
+                moments_entities.add(MomentsEntity.builder()
+                        .momentsNm(Double.parseDouble(request.getParameter(thread_entity.getThread())))
+                        .thread(thread_entity)
+                        .build());
             }
+            MaterialsEntity materals_entity = materialService.getMaterialByRequestParam(controllerService.getParametrFromForm(request));
+            materals_entity.setUser(userEntity);
 
-            return "redirect:/user_registration";
+            materialsDao.save(materals_entity);
+
+            moments_entities.forEach(moment -> {
+                moment.setMaterialsEntity(materals_entity);
+                momentsDao.saveAll(moment);
+            });
+            return "redirect:/material_select";
         }
+        return "redirect:/user_registration";
+    }
 
     /**
      * Пересчет моментов при авто создании материала, запись в temp
      */
     @PostMapping("/create_recalculate")
-    public String materiakUpdateCalc(HttpServletRequest request){
+    public String materiakUpdateCalc(HttpServletRequest request) {
 
 //        int idMaterial = Integer.parseInt(request.getParameter("idMaterial"));
 

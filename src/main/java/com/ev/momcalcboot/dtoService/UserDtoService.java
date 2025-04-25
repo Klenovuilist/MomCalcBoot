@@ -59,7 +59,6 @@ import java.util.List;
 
         UserEntity userEntity = userDaoRepository.getUserById(UserId);
 
-//        List <Materals_db> materals_dbs = materals_db_dao.getMaterialsByUserId(UserId);
 
         return UserDto.builder()
                 .userName(userEntity.getUserName())
@@ -69,7 +68,5 @@ import java.util.List;
                 .passwordUser(userEntity.getPasswordUser())
 //                .userMaterials(materals_dbs)
                 .build();
-
     }
-
 }
