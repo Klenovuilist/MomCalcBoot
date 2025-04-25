@@ -66,6 +66,7 @@ public class ControllerBolt {
         /**
          * Список болтов админа (id =1)
          */
+
         model.addAttribute("boltsAdmin", boltService.boltsAdmin());
 
         /**
@@ -75,7 +76,7 @@ public class ControllerBolt {
         boltListTemp.addAll(boltService.getBoltByUserId(userId));
         model.addAttribute("boltsUser", boltListTemp);
 
-     return "all_bolt.html";
+         return "all_bolt.html";
  }
 
         @PostMapping("/all_bolt")

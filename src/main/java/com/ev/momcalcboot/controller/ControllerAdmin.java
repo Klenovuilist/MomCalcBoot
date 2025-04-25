@@ -116,7 +116,7 @@ private  final MomentsDao momentsDao;
     }
 
         @GetMapping("/bolt_delete/{id}/{userId}")
-        public String deleteBoltById(@PathVariable("id") int boltId, @PathVariable("userId") int userId, Model model ){
+        public String deleteBoltById(@PathVariable("id") int boltId, @PathVariable("userId") int userId, Model model ) {
         try {
 //            int userId = Integer.parseInt(request.getParameter("userId"));
             adminService.deleteBoltById(boltId);
